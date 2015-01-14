@@ -16,6 +16,8 @@
 #include <SPI.h>         // needed for Arduino versions later than 0018
 #include <Ethernet.h>
 #include <EthernetUdp.h>         // UDP library from: bjoern@cs.stanford.edu 12/30/2008
+#include <avr/pgmspace.h>
+#include "ChipTemp.h"
 
 
 // Enter a MAC address and IP address for your controller below.
@@ -25,15 +27,24 @@ IPAddress ip(192, 168, 1, 177);     // Arduino IP address
 IPAddress server(192, 168, 1, 39);  // Server IP address
 unsigned int localPort = 8888;      // local port to listen on
 
+int temp_pin = 0;        // the analog pin for LM34 temp sensor - Cannot use pin 0 as it is used for something by DRobotics LCD shield
+float sensor_reading = 0.0;        // variable to store the value coming from the sensor
+float vref = 1.08;        // variable to store the voltage reference used (check for validity with a DMM)
+float fahrenheit = 0.0;        // variable to store the actual temperature
+float centigrade = 0.0;
+
 // buffers for receiving and sending data
 char packetBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet,
 char  ReplyBuffer[] = "acknowledged";       // a string to send back
 
 // An EthernetUDP instance to let us send and receive packets over UDP
 EthernetUDP Udp;
+ChipTemp chipTemp;
 
 void setup() {
   // start the Ethernet and UDP:
+    pinMode( sensor_pin, INPUT );        // set LM34 temp sensor pin as an input
+ analogReference(INTERNAL);        // set the analog reference to the 1.1V internal reference
   Ethernet.begin(mac,ip);
   Udp.begin(localPort);
 
@@ -47,7 +58,8 @@ void loop() {
   // send a reply, to the IP address and port that sent us the packet we received
   receivePacket();
   sendPacket("Hello");
-
+  extTemp();
+  intTemp();
   //Serial.print("test: ");
   //Serial.println(server);
   
@@ -112,15 +124,29 @@ void testString(char message[], int strLength) {
       start = i+1;
       //Serial.println("Found Comma!");
       //c1 = i;
-      if(c1 == NULL) {
+      /*if(c1 == NULL) {
         c1 = i;
       } else {
          c2 = i;
-      }
+      }*/
     } 
   }
           Serial.println(); 
   Serial.println(message[strLength]);
   //Serial.println(c1);
   //Serial.println(c2);
+}
+
+void extTemp() {
+   //sensor_reading = analogRead(sensor_pin);         // stores the digitized (0 - 1023) analog reading from the LM34
+   fahrenheit = (100.0 * analogRead(temp_pin) * vref)/1023;   // calculates the actual fahrenheit temperature
+   centigrade = (((5.0/9.0))*(fahrenheit-32.0)); //conversion to degrees C
+   
+   Serial.print (centigrade); Serial.print("C "); 
+   Serial.print(fahrenheit); Serial.print("F ");
+}
+
+void intTemp() {
+  Serial.print (chipTemp.celsius()); Serial.print("C "); 
+  Serial.print(chipTemp.fahrenheit()); Serial.println("F "); 
 }
