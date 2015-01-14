@@ -29,9 +29,12 @@ unsigned int localPort = 8888;      // local port to listen on
 
 int temp_pin = 0;        // the analog pin for LM34 temp sensor - Cannot use pin 0 as it is used for something by DRobotics LCD shield
 float sensor_reading = 0.0;        // variable to store the value coming from the sensor
-float vref = 1.08;        // variable to store the voltage reference used (check for validity with a DMM)
+float vref = 1.04;        // variable to store the voltage reference used (check for validity with a DMM)
 float fahrenheit = 0.0;        // variable to store the actual temperature
 float centigrade = 0.0;
+boolean debug = true;
+int interval = 1000;
+
 
 // buffers for receiving and sending data
 char packetBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet,
@@ -43,7 +46,7 @@ ChipTemp chipTemp;
 
 void setup() {
   // start the Ethernet and UDP:
-    pinMode( sensor_pin, INPUT );        // set LM34 temp sensor pin as an input
+    pinMode( temp_pin, INPUT );        // set LM34 temp sensor pin as an input
  analogReference(INTERNAL);        // set the analog reference to the 1.1V internal reference
   Ethernet.begin(mac,ip);
   Udp.begin(localPort);
@@ -52,18 +55,14 @@ void setup() {
 }
 
 void loop() {
-  // if there's data available, read a packet
-  //int packetSize = Udp.parsePacket();
- 
-  // send a reply, to the IP address and port that sent us the packet we received
   receivePacket();
-  sendPacket("Hello");
-  extTemp();
-  intTemp();
-  //Serial.print("test: ");
-  //Serial.println(server);
-  
-  delay(1000);
+  String dataString;
+  dataString += extTemp(); // Load external temperature into data string
+  dataString += intTemp(); // Load internal temperature into data string
+  char message[dataString.length()]; 
+  dataString.toCharArray(message,dataString.length()); // convert string to char array
+  sendPacket(message);
+  delay(interval);
 }
 
 void sendPacket(char message[]) {
@@ -79,22 +78,26 @@ void receivePacket() {
     Serial.print("Received packet of size ");
     Serial.println(packetSize);
     Serial.print("From ");
-    IPAddress remote = Udp.remoteIP();
-    for (int i =0; i < 4; i++)
-    {
-      Serial.print(remote[i], DEC);
-      if (i < 3)
+    if(debug) {
+      IPAddress remote = Udp.remoteIP();
+      for (int i =0; i < 4; i++)
       {
-        Serial.print(".");
+        Serial.print(remote[i], DEC);
+        if (i < 3)
+        {
+          Serial.print(".");
+        }
       }
+      Serial.print(", port ");
+      Serial.println(Udp.remotePort());
     }
-    Serial.print(", port ");
-    Serial.println(Udp.remotePort());
 
     // read the packet into packetBufffer
     Udp.read(packetBuffer,UDP_TX_PACKET_MAX_SIZE);
-    Serial.println("Contents:");
-    Serial.println(packetBuffer);
+    if(debug) {
+      Serial.println("Contents:");
+      Serial.println(packetBuffer);
+    }
     testString(packetBuffer, (packetSize-2));
   }
 }
@@ -137,16 +140,27 @@ void testString(char message[], int strLength) {
   //Serial.println(c2);
 }
 
-void extTemp() {
+String extTemp() {
+  String temp;
    //sensor_reading = analogRead(sensor_pin);         // stores the digitized (0 - 1023) analog reading from the LM34
    fahrenheit = (100.0 * analogRead(temp_pin) * vref)/1023;   // calculates the actual fahrenheit temperature
    centigrade = (((5.0/9.0))*(fahrenheit-32.0)); //conversion to degrees C
-   
-   Serial.print (centigrade); Serial.print("C "); 
-   Serial.print(fahrenheit); Serial.print("F ");
+   temp += centigrade; temp += ',';
+   temp += fahrenheit; temp += ',';
+   if(debug) {
+     Serial.print (centigrade); Serial.print("C "); 
+     Serial.print(fahrenheit); Serial.print("F ");
+   }
+   return temp;
 }
 
-void intTemp() {
-  Serial.print (chipTemp.celsius()); Serial.print("C "); 
-  Serial.print(chipTemp.fahrenheit()); Serial.println("F "); 
+String intTemp() {
+  String temp;
+  temp += chipTemp.celsius(); temp += ',';
+  temp += chipTemp.fahrenheit(); temp += ',';
+  if(debug) {
+    Serial.print (chipTemp.celsius()); Serial.print("C "); 
+    Serial.print(chipTemp.fahrenheit()); Serial.println("F "); 
+  }
+  return temp;
 }
