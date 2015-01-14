@@ -47,6 +47,7 @@ void loop() {
   // send a reply, to the IP address and port that sent us the packet we received
   receivePacket();
   sendPacket("Hello");
+
   //Serial.print("test: ");
   //Serial.println(server);
   
@@ -82,5 +83,44 @@ void receivePacket() {
     Udp.read(packetBuffer,UDP_TX_PACKET_MAX_SIZE);
     Serial.println("Contents:");
     Serial.println(packetBuffer);
+    testString(packetBuffer, (packetSize-2));
   }
+}
+
+void testString(char message[], int strLength) {
+  int i,j,start;
+  start = 0;
+  for (i=0;i<=strLength;i++) 
+    { //check entire string 
+    if (message[i]==',') {//if comma found 
+      /*for (j=0;j=i-1;j++)//for the beginning to the current position - 1 for the comma symbol 
+      {
+        temp[j]=message[j];//transfer the chars to temp string 
+      }
+      Serial.println(temp);
+      for(j=i+1;j==strLength;j++)//the remaining after comma symbol
+      {
+        temp[j]=message[j];//transfer the remain chars
+      }
+      Serial.println(temp);*/
+      for(j=start;j<i;j++) {
+        Serial.print(message[j]);
+        
+      }
+      Serial.println(); 
+                Serial.println(); 
+      start = i+1;
+      //Serial.println("Found Comma!");
+      //c1 = i;
+      if(c1 == NULL) {
+        c1 = i;
+      } else {
+         c2 = i;
+      }
+    } 
+  }
+          Serial.println(); 
+  Serial.println(message[strLength]);
+  //Serial.println(c1);
+  //Serial.println(c2);
 }
