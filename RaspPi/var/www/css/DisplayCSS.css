@@ -1,0 +1,79 @@
+﻿body, html {
+    min-height:900px;
+    min-width:1550px;
+    width:100%;
+    height:100%;
+}
+
+.background{
+    height:100%;
+    width:100%;
+    position:relative;
+}
+
+.header{
+    position:absolute;
+    width:100%;
+    height:12%;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    background-color:gray;
+    text-align:center;
+    vertical-align:central;
+}
+
+.btngroup{
+    width:20%;
+    height:20%;
+    top:10%;
+    right:2%;
+    position:absolute;
+}
+
+.bottomPanel{
+    position:absolute;
+    bottom:0;
+    right:0;
+    left:0;
+    width:100%;
+    height:3%;
+    background-color:gray;
+}
+
+.HomePage{
+    background-color:gray;
+    left:.2%;
+    top:13%;
+    height:83%;
+    width:70%;
+    border-radius:10px;
+    position:absolute;
+}
+
+.iframeSimHouse{
+    position:absolute;
+    right:0;
+    top:0;
+    left:0;
+    bottom:0;
+    height:100%;
+    width:100%;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.console{
+    position:absolute;
+    border: 1px solid black;
+    right:1%;
+    top:13%;
+    height:83%;
+    width:28%;
+    background-color:gray;
+    border-radius:10px;
+}
+
+
+
