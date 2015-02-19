@@ -14,9 +14,7 @@
 
 
 #include <SPI.h>         // needed for Arduino versions later than 0018
-#include <Ethernet.h>
-#include <EthernetUdp.h>         // UDP library from: bjoern@cs.stanford.edu 12/30/2008
-#include <avr/pgmspace.h>
+#include <UIPEthernet.h>
 #include "ChipTemp.h"
 
 
@@ -33,11 +31,9 @@ float vref = 1.04;        // variable to store the voltage reference used (check
 float fahrenheit = 0.0;        // variable to store the actual temperature
 float centigrade = 0.0;
 boolean debug = true;
-int interval = 1000;
 
 
 // buffers for receiving and sending data
-char packetBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet,
 char  ReplyBuffer[] = "acknowledged";       // a string to send back
 
 // An EthernetUDP instance to let us send and receive packets over UDP
@@ -56,29 +52,25 @@ void setup() {
 
 void loop() {
   receivePacket();
-  String dataString;
-  dataString += extTemp(); // Load external temperature into data string
-  dataString += intTemp(); // Load internal temperature into data string
-  char message[dataString.length()]; 
-  dataString.toCharArray(message,dataString.length()); // convert string to char array
-  sendPacket(message);
-  delay(interval);
+  
+  //delay(interval);
 }
 
 void sendPacket(char message[]) {
-  Udp.beginPacket(server, localPort);
-  Udp.write(message);
+  Udp.beginPacket(server, Udp.remotePort());
+  Udp.print(message);
   Udp.endPacket();
+  Udp.stop();
+        Serial.print("restart connection: ");
+    Serial.println (Udp.begin(8888) ? "success" : "failed");
 }
 
 void receivePacket() {
   int packetSize = Udp.parsePacket();
   if(packetSize)
   {
-    Serial.print("Received packet of size ");
-    Serial.println(packetSize);
-    Serial.print("From ");
     if(debug) {
+      Serial.print("Received packet from ");
       IPAddress remote = Udp.remoteIP();
       for (int i =0; i < 4; i++)
       {
@@ -89,17 +81,39 @@ void receivePacket() {
         }
       }
       Serial.print(", port ");
-      Serial.println(Udp.remotePort());
+      Serial.print(Udp.remotePort());
+      Serial.print(", size ");
+      Serial.println(packetSize);
     }
+    
 
     // read the packet into packetBufffer
-    Udp.read(packetBuffer,UDP_TX_PACKET_MAX_SIZE);
+    char* msg = (char*)malloc(packetSize+1);
+        int len = Udp.read(msg,packetSize+1);
+        msg[len]=0;
     if(debug) {
-      Serial.println("Contents:");
-      Serial.println(packetBuffer);
+      Serial.print("Contents: ");
+      Serial.println(msg);
     }
-    testString(packetBuffer, (packetSize-2));
+    char* compare = "hello";
+    if(msg == compare) {
+      Serial.println("TRUE"); 
+    }
+    //testString(msg, (packetSize-2));
+    free(msg);
+    Udp.flush();
+    
+    
+    
+    
+    String dataString;
+  dataString += extTemp(); // Load external temperature into data string
+  dataString += intTemp(); // Load internal temperature into data string
+  char message[dataString.length()]; 
+  dataString.toCharArray(message,dataString.length()); // convert string to char array
+  sendPacket(message);
   }
+  
 }
 
 void testString(char message[], int strLength) {
