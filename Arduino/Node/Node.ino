@@ -43,13 +43,13 @@ ChipTemp chipTemp;
 
 void setup() {
   // start the Ethernet and UDP:
-    pinMode( temp_pin, INPUT );        // set LM34 temp sensor pin as an input
-    pinMode( motion_pin, INPUT );        // set LM34 temp sensor pin as an input
- analogReference(INTERNAL);        // set the analog reference to the 1.1V internal reference
-  Ethernet.begin(mac,ip);
-  Udp.begin(localPort);
-
-  Serial.begin(9600);
+  pinMode( temp_pin, INPUT );        // set LM34 temp sensor pin as an input
+  pinMode( motion_pin, INPUT );      // set PIR sensor pin as an input
+  analogReference(INTERNAL);         // set the analog reference to the 1.1V internal reference
+  Ethernet.begin(mac,ip);            // Start Ethernet connection
+  Udp.begin(localPort);              // Start UDP server
+  
+  Serial.begin(9600);                // Serial Output init
 }
 
 void loop() {
@@ -66,16 +66,18 @@ void sendPacket(char message[]) {
   Udp.endPacket();
   Udp.stop();
         Serial.print("restart connection: ");
-    Serial.println (Udp.begin(8888) ? "success" : "failed");
+    Serial.println (Udp.begin(localPort) ? "success" : "failed");
 }
 
 void receivePacket() {
   int packetSize = Udp.parsePacket();
   if(packetSize)
   {
+    IPAddress remote = Udp.remoteIP();
+    if(server == remote) {
     if(debug) {
       Serial.print("Received packet from ");
-      IPAddress remote = Udp.remoteIP();
+      
       for (int i =0; i < 4; i++)
       {
         Serial.print(remote[i], DEC);
@@ -93,8 +95,8 @@ void receivePacket() {
 
     // read the packet into packetBufffer
     char* msg = (char*)malloc(packetSize+1);
-        int len = Udp.read(msg,packetSize+1);
-        msg[len]=0;
+    int len = Udp.read(msg,packetSize+1);
+    msg[len]=0;
     if(debug) {
       Serial.print("Contents: ");
       Serial.println(msg);
@@ -107,17 +109,18 @@ void receivePacket() {
     free(msg);
     Udp.flush();
     
-    
-    
-    
+    // Gather data to send to server
     String dataString;
-  dataString += extTemp(); // Load external temperature into data string
-  dataString += intTemp(); // Load internal temperature into data string
-  char message[dataString.length()]; 
-  dataString.toCharArray(message,dataString.length()); // convert string to char array
-  sendPacket(message);
+    dataString += extTemp(); // Load external temperature into data string
+    dataString += intTemp(); // Load internal temperature into data string
+    dataString += getMotion();
+    char message[dataString.length()]; 
+    dataString.toCharArray(message,dataString.length()); // convert string to char array
+    sendPacket(message);
+    } else {
+      Serial.println("Invalid Server!");
+    }
   }
-  
 }
 
 void testString(char message[], int strLength) {
@@ -166,8 +169,9 @@ String extTemp() {
    temp += centigrade; temp += ',';
    temp += fahrenheit; temp += ',';
    if(debug) {
+     Serial.print("External Temperature: ");
      Serial.print (centigrade); Serial.print("C "); 
-     Serial.print(fahrenheit); Serial.print("F ");
+     Serial.print(fahrenheit); Serial.println("F ");
    }
    return temp;
 }
@@ -177,8 +181,17 @@ String intTemp() {
   temp += chipTemp.celsius(); temp += ',';
   temp += chipTemp.fahrenheit(); temp += ',';
   if(debug) {
+    Serial.print("Internal Temperature: ");
     Serial.print (chipTemp.celsius()); Serial.print("C "); 
     Serial.print(chipTemp.fahrenheit()); Serial.println("F "); 
   }
+  return temp;
+}
+
+String getMotion() {
+  String temp;
+  Serial.print("Motion state: ");
+  Serial.println(digitalRead(motion_pin));
+  temp += digitalRead(motion_pin); temp += ',';
   return temp;
 }
