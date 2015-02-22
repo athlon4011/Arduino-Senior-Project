@@ -26,6 +26,7 @@ IPAddress server(192, 168, 1, 39);  // Server IP address
 unsigned int localPort = 8888;      // local port to listen on
 
 int temp_pin = 0;        // the analog pin for LM34 temp sensor - Cannot use pin 0 as it is used for something by DRobotics LCD shield
+int motion_pin = 2;
 float sensor_reading = 0.0;        // variable to store the value coming from the sensor
 float vref = 1.04;        // variable to store the voltage reference used (check for validity with a DMM)
 float fahrenheit = 0.0;        // variable to store the actual temperature
@@ -43,6 +44,7 @@ ChipTemp chipTemp;
 void setup() {
   // start the Ethernet and UDP:
     pinMode( temp_pin, INPUT );        // set LM34 temp sensor pin as an input
+    pinMode( motion_pin, INPUT );        // set LM34 temp sensor pin as an input
  analogReference(INTERNAL);        // set the analog reference to the 1.1V internal reference
   Ethernet.begin(mac,ip);
   Udp.begin(localPort);
@@ -52,7 +54,9 @@ void setup() {
 
 void loop() {
   receivePacket();
-  
+  //Serial.print("Motion state: ");
+  //Serial.println(digitalRead(motion_pin));
+  //delay(500);
   //delay(interval);
 }
 
