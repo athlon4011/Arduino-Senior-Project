@@ -42,86 +42,19 @@ EthernetUDP Udp;
 ChipTemp chipTemp;
 
 void setup() {
-  // start the Ethernet and UDP:
   pinMode( temp_pin, INPUT );        // set LM34 temp sensor pin as an input
   pinMode( motion_pin, INPUT );      // set PIR sensor pin as an input
   analogReference(INTERNAL);         // set the analog reference to the 1.1V internal reference
   Ethernet.begin(mac,ip);            // Start Ethernet connection
   Udp.begin(localPort);              // Start UDP server
-  
   Serial.begin(9600);                // Serial Output init
 }
 
 void loop() {
   receivePacket();
-  //Serial.print("Motion state: ");
-  //Serial.println(digitalRead(motion_pin));
-  //delay(500);
-  //delay(interval);
 }
 
-void sendPacket(char message[]) {
-  Udp.beginPacket(server, Udp.remotePort());
-  Udp.print(message);
-  Udp.endPacket();
-  Udp.stop();
-        Serial.print("restart connection: ");
-    Serial.println (Udp.begin(localPort) ? "success" : "failed");
-}
 
-void receivePacket() {
-  int packetSize = Udp.parsePacket();
-  if(packetSize)
-  {
-    IPAddress remote = Udp.remoteIP();
-    if(server == remote) {
-    if(debug) {
-      Serial.print("Received packet from ");
-      
-      for (int i =0; i < 4; i++)
-      {
-        Serial.print(remote[i], DEC);
-        if (i < 3)
-        {
-          Serial.print(".");
-        }
-      }
-      Serial.print(", port ");
-      Serial.print(Udp.remotePort());
-      Serial.print(", size ");
-      Serial.println(packetSize);
-    }
-    
-
-    // read the packet into packetBufffer
-    char* msg = (char*)malloc(packetSize+1);
-    int len = Udp.read(msg,packetSize+1);
-    msg[len]=0;
-    if(debug) {
-      Serial.print("Contents: ");
-      Serial.println(msg);
-    }
-    char* compare = "hello";
-    if(msg == compare) {
-      Serial.println("TRUE"); 
-    }
-    //testString(msg, (packetSize-2));
-    free(msg);
-    Udp.flush();
-    
-    // Gather data to send to server
-    String dataString;
-    dataString += extTemp(); // Load external temperature into data string
-    dataString += intTemp(); // Load internal temperature into data string
-    dataString += getMotion();
-    char message[dataString.length()]; 
-    dataString.toCharArray(message,dataString.length()); // convert string to char array
-    sendPacket(message);
-    } else {
-      Serial.println("Invalid Server!");
-    }
-  }
-}
 
 void testString(char message[], int strLength) {
   int i,j,start;
@@ -161,37 +94,8 @@ void testString(char message[], int strLength) {
   //Serial.println(c2);
 }
 
-String extTemp() {
-  String temp;
-   //sensor_reading = analogRead(sensor_pin);         // stores the digitized (0 - 1023) analog reading from the LM34
-   fahrenheit = (100.0 * analogRead(temp_pin) * vref)/1023;   // calculates the actual fahrenheit temperature
-   centigrade = (((5.0/9.0))*(fahrenheit-32.0)); //conversion to degrees C
-   temp += centigrade; temp += ',';
-   temp += fahrenheit; temp += ',';
-   if(debug) {
-     Serial.print("External Temperature: ");
-     Serial.print (centigrade); Serial.print("C "); 
-     Serial.print(fahrenheit); Serial.println("F ");
-   }
-   return temp;
-}
 
-String intTemp() {
-  String temp;
-  temp += chipTemp.celsius(); temp += ',';
-  temp += chipTemp.fahrenheit(); temp += ',';
-  if(debug) {
-    Serial.print("Internal Temperature: ");
-    Serial.print (chipTemp.celsius()); Serial.print("C "); 
-    Serial.print(chipTemp.fahrenheit()); Serial.println("F "); 
-  }
-  return temp;
-}
 
-String getMotion() {
-  String temp;
-  Serial.print("Motion state: ");
-  Serial.println(digitalRead(motion_pin));
-  temp += digitalRead(motion_pin); temp += ',';
-  return temp;
-}
+
+
+
