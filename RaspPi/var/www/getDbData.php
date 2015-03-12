@@ -1,6 +1,6 @@
 
 <?php
-                $link = mysql_connect('localhost', 'root', 'Rules@123');
+                $link = mysql_connect('localhost', 'root', 'H0m3r');
                 if (!$link) {
                     die('Could not connect: ' . mysql_error());
                 }
