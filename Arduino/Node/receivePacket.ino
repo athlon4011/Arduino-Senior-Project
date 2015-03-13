@@ -41,12 +41,12 @@ void receivePacket() {
     // Gather data to send to server
     String dataString;
     dataString += extTemp(); // Load external temperature into data string
-    dataString += intTemp(); // Load internal temperature into data string
+    //dataString += intTemp(); // Load internal temperature into data string
     dataString += getMotion();
     dataString += getLux();
     char message[dataString.length()]; 
     dataString.toCharArray(message,dataString.length()); // convert string to char array
-    sendPacket(message);
+    sendPacket(message,Udp.remotePort());
     } else {
       Serial.println("Invalid Server!");
     }

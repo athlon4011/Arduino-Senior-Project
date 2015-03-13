@@ -1,7 +1,7 @@
 String intTemp() {
   String temp;
-  temp += chipTemp.celsius(); temp += ',';
-  temp += chipTemp.fahrenheit(); temp += ',';
+  //temp += chipTemp.celsius(); temp += ',';
+    temp += 'temp'; temp += chipTemp.fahrenheit(); temp += ',';
   if(debug) {
     Serial.print("Internal Temperature: ");
     Serial.print (chipTemp.celsius()); Serial.print("C "); 

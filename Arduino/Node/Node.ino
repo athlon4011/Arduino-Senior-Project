@@ -35,7 +35,7 @@ boolean debug = true;
 
 
 // buffers for receiving and sending data
-char  ReplyBuffer[] = "acknowledged";       // a string to send back
+char  bootBuffer[] = "booting";       // a string to send back
 
 // An EthernetUDP instance to let us send and receive packets over UDP
 EthernetUDP Udp;
@@ -48,10 +48,17 @@ void setup() {
   Ethernet.begin(mac,ip);            // Start Ethernet connection
   Udp.begin(localPort);              // Start UDP server
   Serial.begin(9600);                // Serial Output init
+  //delay(10000);
+  /*Udp.flush();
+  sendPacket(bootBuffer,8888);*/
 }
 
 void loop() {
   receivePacket();
+//Udp.flush();
+//char  test[] = "acknowledged";
+  //sendPacket(bootBuffer,8888);
+  //delay(2000);
 }
 
 

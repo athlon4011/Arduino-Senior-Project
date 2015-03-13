@@ -1,5 +1,5 @@
-void sendPacket(char message[]) {
-  Udp.beginPacket(server, Udp.remotePort());
+void sendPacket(char message[], int port) {
+  Udp.beginPacket(server, port);
   Udp.print(message);
   Udp.endPacket();
   Udp.stop();

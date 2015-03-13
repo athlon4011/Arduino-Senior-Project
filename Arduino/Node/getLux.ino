@@ -6,6 +6,6 @@ String getLux (){
   //int lux=(2500/Vout-500)/10;
   Serial.print("Lux reading: ");
   Serial.println(lux);
-  temp += lux; temp += ',';
+  temp += "lux"; temp += ','; temp += lux; temp += ',';
   return temp;
 }
