@@ -54,11 +54,6 @@ void receivePacket() {
     }
     //testString(msg, (packetSize-2));
     free(msg);
-    for node in nodes
-      print "NodeID: " | node[0]
-      print "IP: " | node[1]
-    
-    
     } else {
       Serial.println("Invalid Server!");
       Udp.stop();
