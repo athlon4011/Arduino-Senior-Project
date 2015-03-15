@@ -50,7 +50,7 @@ void receivePacket() {
     } else if(String(msg).startsWith("send")) {
       String test = String(msg);
       test.remove(0,5);
-      testString(test);
+      separateData(test);
       Udp.stop();
         Serial.print("restart connection: ");
     Serial.println (Udp.begin(localPort) ? "success" : "failed");

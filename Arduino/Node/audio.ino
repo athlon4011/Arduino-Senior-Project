@@ -1,4 +1,4 @@
-void audio(int test) {
+void setTone(int test) {
   if(test == 1) {
     for (int thisNote = 0; thisNote < 8; thisNote++) {
     

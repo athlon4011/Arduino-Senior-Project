@@ -1,4 +1,4 @@
-void blinkLED(int pin1,int pin2,int pin3,int loops, int interval) {
+void setLED(int pin1,int pin2,int pin3,int loops, int interval) {
   int i;
   for(i=0;i<loops;i++) {
     if(pin1 != 0) {digitalWrite(red, HIGH);  } // turn the LED on (HIGH is the voltage level)
