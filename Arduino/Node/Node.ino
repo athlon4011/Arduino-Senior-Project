@@ -42,8 +42,8 @@ float sensor_reading = 0.0;        // variable to store the value coming from th
 float vref = 1.04;        // variable to store the voltage reference used (check for validity with a DMM)
 float fahrenheit = 0.0;        // variable to store the actual temperature
 float centigrade = 0.0;
-boolean debug = false;
-boolean boot = true;
+boolean debug = true;
+boolean boot = false;
 
 
 // buffers for receiving and sending data
@@ -71,50 +71,53 @@ void setup() {
 void loop() {  
 
   receivePacket();
-  
-/*Udp.flush();
+if(boot) {
+Udp.flush();
     char  test[] = "acknowledged";
     sendPacket(bootBuffer,8888);
     delay(2000);
     //boot = false;
-    Serial.println("Sent Message!!!!!!!!!!!!");*/
-}
-
-
-
-void testString(String message) {
-  int i,j,start;
-  start = 0;
-  Serial.println(message);
-  String test = "";
-  String test2 = "";
-  for (i=0;i<=message.length();i++) 
-    { //check entire string 
-    if (message[i]!=',') {
-      test += message[i];
-    }
-    if (message[i]==',') {//if comma found 
-      Serial.println("found comma");
-      Serial.println(test);
+    //Serial.println("Sent Message!!!!!!!!!!!!");
+    
+     int packetSize = Udp.parsePacket();
+  if(packetSize)
+  {
+    Serial.println("got message");
+    IPAddress remote = Udp.remoteIP();
+    boot = false;
+    if(debug) {
+      Serial.print("Received packet from ");
       
-      
-      for(j=i+1;j<message.length();j++) {
-        //Serial.print(message[j]);
-        test2 += message[j];
+      for (int i =0; i < 4; i++)
+      {
+        Serial.print(remote[i], DEC);
+        if (i < 3)
+        {
+          Serial.print(".");
+        }
       }
-      Serial.println(test2);
-      audio(test.toInt());
-      int pin1 = test2[0]-48;
-      int pin2 = test2[1]-48;
-      int pin3 = test2[2]-48;
-      blinkLED(pin1,pin2,pin3,4,200);
+      Serial.print(", port ");
+      Serial.print(Udp.remotePort());
+      Serial.print(", size ");
+      Serial.println(packetSize);
+    }
+    // read the packet into packetBufffer
+    char* msg = (char*)malloc(packetSize+1);
+    int len = Udp.read(msg,packetSize+1);
+    msg[len]=0;
+    if(debug) {
+      Serial.print("Contents: ");
+      Serial.println(msg);
+      //Serial.print('|');
+    }
     }
   }
-          Serial.println(); 
-  //Serial.println(message[strLength]);
-  //Serial.println(c1);
-  //Serial.println(c2);
+  Udp.flush();
 }
+
+
+
+
 
 
 
