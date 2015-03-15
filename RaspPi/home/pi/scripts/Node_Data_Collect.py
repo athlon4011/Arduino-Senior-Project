@@ -30,7 +30,6 @@ def dBJSON_Store(json_file,NodeID):
     message = "Node "+str(NodeID)+" sensor data was stored."
     log_Event("System",message)
 
-
 #Send Request to Arduino for Sensor information
 def arduino_Data_Request(NodeIP,NodeID):
     received = ''
@@ -92,21 +91,22 @@ def check_duplicate_data(NodeID,json_file):
         print("Error checking duplicate data")
         print(err)
 
+#Creates a new Event based on type/message		
 def log_Event(type,message):
     cursor = dataBase.cursor()
     cursor.execute("Insert into Event_Log(Date,Type,Message) values(NOW(),%s,%s)",(type,message))
     dataBase.commit()
 
+#Waits for Data to be available on the socket
 def recv_timeout(sock,timeout=1):
     #make socket non blocking
     sock.setblocking(0)
-    #total data partwise in an array
+    #total data in an array
     total_data=[];
     data='';
      
     #beginning time
     begin=time.time()
-    success = False
     while 1:
         #if you got some data, then break after timeout
         if total_data and time.time()-begin > timeout:
@@ -130,6 +130,16 @@ def recv_timeout(sock,timeout=1):
             pass
     return ''.join(total_data)  
   
+#Send Arduino a command
+def arduino_Send_Command(NodeIP,data):
+	HOST, PORT = NodeIP, 8888
+	# SOCK_DGRAM is the socket type to use for UDP sockets
+	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	
+	# As you can see, there is no connect() call; UDP has no connections.
+	# Instead, data is directly sent to the recipient via sendto().
+	sock.sendto("send" + data + "\n", (HOST, PORT))
+
     
 #Runs Forever
 while True:
