@@ -1,4 +1,4 @@
-String intTemp() {
+/*String intTemp() {
   String temp;
   //temp += chipTemp.celsius(); temp += ',';
     temp += 'temp'; temp += chipTemp.fahrenheit(); temp += ',';
@@ -8,4 +8,4 @@ String intTemp() {
     Serial.print(chipTemp.fahrenheit()); Serial.println("F "); 
   }
   return temp;
-}
+}*/

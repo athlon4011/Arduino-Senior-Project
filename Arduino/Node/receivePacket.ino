@@ -26,8 +26,8 @@ void receivePacket() {
     msg[len]=0;
     if(debug) {
       Serial.print("Contents: ");
-      Serial.print(msg);
-      Serial.print('|');
+      Serial.println(msg);
+      //Serial.print('|');
     }
     //String test = msg;
     //test.trim();
@@ -37,7 +37,7 @@ void receivePacket() {
     //Serial.println(test);
     Udp.flush();
     if(String(msg).startsWith("pull")) {
-      Serial.println("TRUE"); 
+      //Serial.println("TRUE"); 
       // Gather data to send to server
       String dataString;
       dataString += extTemp(); // Load external temperature into data string
@@ -47,6 +47,13 @@ void receivePacket() {
       char message[dataString.length()]; 
       dataString.toCharArray(message,dataString.length()); // convert string to char array
       sendPacket(message,Udp.remotePort());
+    } else if(String(msg).startsWith("send")) {
+      String test = String(msg);
+      test.remove(0,5);
+      testString(test);
+      Udp.stop();
+        Serial.print("restart connection: ");
+    Serial.println (Udp.begin(localPort) ? "success" : "failed");
     } else {
       Udp.stop();
         Serial.print("restart connection: ");
