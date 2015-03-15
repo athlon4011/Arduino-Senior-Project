@@ -43,6 +43,7 @@ float vref = 1.04;        // variable to store the voltage reference used (check
 float fahrenheit = 0.0;        // variable to store the actual temperature
 float centigrade = 0.0;
 boolean debug = false;
+boolean boot = true;
 
 
 // buffers for receiving and sending data
@@ -70,9 +71,10 @@ void setup() {
 void loop() {  
 
   receivePacket();
+  
 /*Udp.flush();
     char  test[] = "acknowledged";
-    sendPacket(test,8888);
+    sendPacket(bootBuffer,8888);
     delay(2000);
     //boot = false;
     Serial.println("Sent Message!!!!!!!!!!!!");*/
