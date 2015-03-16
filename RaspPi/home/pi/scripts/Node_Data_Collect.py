@@ -131,22 +131,32 @@ def recv_timeout(sock,timeout=1):
     return ''.join(total_data)  
   
 #Send Arduino a command
-def arduino_Send_Command(NodeIP,data):
+def arduino_Send_Command(NodeIP,data,NodeID):
 	HOST, PORT = NodeIP, 8888
 	# SOCK_DGRAM is the socket type to use for UDP sockets
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	
 	# As you can see, there is no connect() call; UDP has no connections.
 	# Instead, data is directly sent to the recipient via sendto().
-	sock.sendto("send" + data + "\n", (HOST, PORT))
+	sock.sendto("send," + data + "\n", (HOST, PORT))
+	
+	#Log Event Command to arduino
+	message = "Sent " + data + " to Node " + str(NodeID) + "."
+	log_Event("System",message)
+
+data = "1,111"	
+
 
     
 #Runs Forever
-while True:
-    for node in mysql_fetch_assoc():
-        arduinoData = arduino_Data_Request(node['IP'],node['NodeID'])
-        json_file = convert_String_ToJSON(arduinoData)
-        if check_duplicate_data(node['NodeID'],json_file) == False:
-            dBJSON_Store(json_file,node['NodeID']);
-        time.sleep(1)
+
+for node in mysql_fetch_assoc():
+	#Testing
+	arduino_Send_Command(node['IP'],data,node['NodeID'])
+	#Working
+	arduinoData = arduino_Data_Request(node['IP'],node['NodeID'])
+	json_file = convert_String_ToJSON(arduinoData)
+	if check_duplicate_data(node['NodeID'],json_file) == False:
+		dBJSON_Store(json_file,node['NodeID']);
+	time.sleep(1)
   
