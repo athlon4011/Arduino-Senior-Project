@@ -1,11 +1,11 @@
 import time
 import nodeComm
 import dBComm
-import Functions
+import Function
 
 #Checks to see if another instance of this scrip is running
 #if running end this process, if not continue running script
-Functions.check_for_running()
+Function.check_for_running()
 data = "1,111"	
 
 #Runs Forever
@@ -17,7 +17,7 @@ while 1:
 		#Collects Nodes Sensor data (String Form)
 		nodeData = nodeComm.Node_Data_Request(node['IP'],node['NodeID'])
 		#Converts Nodes string into Json
-		json_file = Functions.convert_String_ToJSON(nodeData)
+		json_file = Function.convert_String_ToJSON(nodeData)
 		#Checks to see if current data is equal to last entry
 		#if not store the json
 		if dBComm.check_duplicate_data(node['NodeID'],json_file) == False:
