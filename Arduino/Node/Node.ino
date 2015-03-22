@@ -35,8 +35,8 @@ unsigned int localPort = 8888;      // local port to listen on
 
 int temp_pin = 0;        // the analog pin for LM34 temp sensor - Cannot use pin 0 as it is used for something by DRobotics LCD shield
 int motion_pin = 2;
-int blue = 7;
-int green = 6;
+int blue = 6;
+int green = 3;
 int red = 5;
 float sensor_reading = 0.0;        // variable to store the value coming from the sensor
 float vref = 1.04;        // variable to store the voltage reference used (check for validity with a DMM)
@@ -111,6 +111,9 @@ Udp.flush();
       //Serial.print('|');
     }
     }
+    Udp.stop();
+        Serial.print("restart connection: ");
+    Serial.println (Udp.begin(localPort) ? "success" : "failed");
   }
   Udp.flush();
 }

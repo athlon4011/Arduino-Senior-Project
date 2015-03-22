@@ -2,9 +2,19 @@ void separateData(String message) {
   int i,j,start;
   start = 0;
   Serial.println(message);
-  String test = "";
-  String test2 = "";
-  for (i=0;i<=message.length();i++) 
+  Serial.print("Substring test: ");
+  
+  //String test = message.substring(0,0);
+  //Serial.println(test);
+  setTone(int(message[0])-48);
+  String test2 = message.substring(2,5);
+  Serial.println(test2);
+  int pin1 = test2[0]-48;
+  int pin2 = test2[1]-48;
+  int pin3 = test2[2]-48;
+  setLED(pin1,pin2,pin3,4,200);    
+      
+  /*for (i=0;i<=message.length();i++) 
     { //check entire string 
     if (message[i]!=',') {
       test += message[i];
@@ -26,7 +36,7 @@ void separateData(String message) {
       setLED(pin1,pin2,pin3,4,200);
     }
   }
-          Serial.println(); 
+          Serial.println(); */
   //Serial.println(message[strLength]);
   //Serial.println(c1);
   //Serial.println(c2);
