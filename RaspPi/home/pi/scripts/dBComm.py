@@ -60,3 +60,19 @@ def check_duplicate_data(NodeID,json_file):
     except Exception as err:
         print("Error checking duplicate data")
         print(err)
+
+#Checks Node Database if Node Exists, if Not Store
+def store_node_information(NodeIP):
+    try:
+        cursor = dataBase.cursor()
+        cursor.execute("Select count(*) from Nodes where IP = %s;",(NodeIP))
+        count = cursor.fetchone()[0]
+        if count == 0:
+            cursor.execute("Insert into Nodes(IP) values (%s)",(NodeIP))
+            dataBase.commit()
+        #NODE RESTART LOG??? 
+        else:
+            print("Already Have that Node")           
+    except Exception as err:
+        print("Error checking Node Table")
+        print(err)

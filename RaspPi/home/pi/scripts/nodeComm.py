@@ -36,7 +36,7 @@ def Node_Data_Request(NodeIP,NodeID):
             message = "Failed to retrieve Node "+str(NodeID)+" data."
             dBComm.log_Event("Error",message)
     return received;
-	
+
 #Waits for Data to be available on the socket
 def recv_timeout(sock,timeout=1):
     #make socket non blocking

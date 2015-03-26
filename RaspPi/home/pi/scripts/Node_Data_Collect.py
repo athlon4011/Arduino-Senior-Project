@@ -6,6 +6,8 @@ import Functions
 #Checks to see if another instance of this scrip is running
 #if running end this process, if not continue running script
 Functions.check_for_running()
+
+#(sound,red,green,blue,loops(1-9),delay(1-9))
 data = "1,111"	
 
 #Runs Forever
@@ -23,4 +25,3 @@ while 1:
 		if dBComm.check_duplicate_data(node['NodeID'],json_file) == False:
 			dBComm.dBJSON_Store(json_file,node['NodeID']);
 		time.sleep(1)
-  
