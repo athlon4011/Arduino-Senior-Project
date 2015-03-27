@@ -22,3 +22,12 @@ def check_for_running():
     status = commands.getstatusoutput("ps aux | grep -e '%s' | grep -v grep | awk '{print $2}'| awk '{print $2}'" % script_name)
     if status[1]:
         sys.exit(0);
+        
+#Storing of Node Data into Array
+def tempNodeArray(NodeID,data):
+    data = []
+    dataObj = {NodeID,data}
+    data.append(dataObj)
+    
+    return data
+    

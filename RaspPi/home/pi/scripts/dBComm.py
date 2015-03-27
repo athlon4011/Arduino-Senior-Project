@@ -40,8 +40,9 @@ def log_Event(type,message):
     cursor = dataBase.cursor()
     cursor.execute("Insert into Event_Log(Date,Type,Message) values(NOW(),%s,%s)",(type,message))
     dataBase.commit()
-  
- #Checks to see if the last data entry matches if so, do not store in Database
+
+
+#Checks to see if the last data entry matches if so, do not store in Database
 def check_duplicate_data(NodeID,json_file):
 
     try:
@@ -73,6 +74,18 @@ def store_node_information(NodeIP):
         #NODE RESTART LOG??? 
         else:
             print("Already Have that Node")           
+    except Exception as err:
+        print("Error checking Node Table")
+        print(err)
+
+def get_Rules():
+    try:
+        cursor = dataBase.cursor()
+        cursor.execute("Select Data from Rules where enabled = 1;")
+        data = cursor.fetchall()
+        cursor.execute("Select Title from Rules where enabled = 1;")
+        title = cursor.fetchall()
+        return data,title
     except Exception as err:
         print("Error checking Node Table")
         print(err)
