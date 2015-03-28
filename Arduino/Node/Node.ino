@@ -46,6 +46,7 @@ void setup() {
   Ethernet.begin(mac,ip);            // Start Ethernet connection
   Udp.begin(localPort);              // Start UDP server
   Serial.begin(9600);                // Serial Output init
+  Serial.print(mac[0]);
   while(boot) {
 Udp.flush();
     sendPacket(bootBuffer,8888);
@@ -68,6 +69,7 @@ Udp.flush();
         Serial.print("restart connection: ");
     Serial.println (Udp.begin(localPort) ? "success" : "failed");
     Udp.flush();
+    //delay(2000);
   }
 }
 

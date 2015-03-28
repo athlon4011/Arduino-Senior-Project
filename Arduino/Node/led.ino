@@ -12,7 +12,15 @@
   }
 }*/
 
-void setLED(int red, int green, int blue, int glow, int loops, int interval) {
+void setLED(int red, int green, int blue, int loops, int interval) {
+  Serial.print("red: ");
+  Serial.println(red);
+  Serial.print("green: ");
+  Serial.println(green);
+  Serial.print("blue: ");
+  Serial.println(blue);
+  Serial.print("loops: ");
+  Serial.println(loops);
   Serial.print("interval: ");
   Serial.println(interval);
     byte on[] = {red,green,blue}; //the RGB (red, gren blue) value for a color to display  
