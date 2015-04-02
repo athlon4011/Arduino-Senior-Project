@@ -3,6 +3,14 @@ import sys
 import commands
 import os
 
+#Node Class
+class node:
+	def __init__(self,id, motion, lux,temp):
+		self.motion = motion
+		self.lux = lux
+		self.temp = temp
+		self.id = id
+
 # Functions
 #Convert String to JSON
 def convert_String_ToJSON( arduinoData ):
@@ -22,12 +30,10 @@ def check_for_running():
     status = commands.getstatusoutput("ps aux | grep -e '%s' | grep -v grep | awk '{print $2}'| awk '{print $2}'" % script_name)
     if status[1]:
         sys.exit(0);
-        
+       
 #Storing of Node Data into Array
 def tempNodeArray(NodeID,data):
-    data = []
-    dataObj = {NodeID,data}
-    data.append(dataObj)
-    
-    return data
+	data = json.loads(data)
+	nodeobj = node(NodeID,data['motion'],data['lux'],data['temp'])
+	return nodeobj
     

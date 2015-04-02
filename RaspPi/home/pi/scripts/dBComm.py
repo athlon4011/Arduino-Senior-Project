@@ -81,9 +81,9 @@ def store_node_information(NodeIP):
 def get_Rules():
     try:
         cursor = dataBase.cursor()
-        cursor.execute("Select Data from Rules where enabled = 1;")
+        cursor.execute("Select Data from Rules where enabled = 1")
         data = cursor.fetchall()
-        cursor.execute("Select Title from Rules where enabled = 1;")
+        cursor.execute("Select Title from Rules where enabled = 1")
         title = cursor.fetchall()
         return data,title
     except Exception as err:
