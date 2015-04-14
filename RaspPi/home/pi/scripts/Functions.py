@@ -5,11 +5,12 @@ import os
 
 #Node Class
 class node:
-	def __init__(self,id, motion, lux,temp):
+	def __init__(self,id,ip,motion, lux,temp):
 		self.motion = motion
 		self.lux = lux
 		self.temp = temp
 		self.id = id
+		self.ip = ip
 
 # Functions
 #Convert String to JSON
@@ -32,8 +33,9 @@ def check_for_running():
         sys.exit(0);
        
 #Storing of Node Data into Array
-def tempNodeArray(NodeID,data):
+def tempNodeArray(NodeID,NodeIP,data):
 	data = json.loads(data)
-	nodeobj = node(NodeID,data['motion'],data['lux'],data['temp'])
+	nodeobj = node(NodeID,NodeIP,data['motion'],data['lux'],data['temp'])
 	return nodeobj
     
+	

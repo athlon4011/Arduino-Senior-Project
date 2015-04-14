@@ -1,8 +1,10 @@
 import socket
 
 from dBComm import store_node_information
+from Functions import check_for_running
 
-
+#Checking To see if this script is already running, if so do not run
+check_for_running()
 
 addr = ('', 8888)
 # SOCK_DGRAM is the socket type to use for UDP sockets

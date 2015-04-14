@@ -89,3 +89,21 @@ def get_Rules():
     except Exception as err:
         print("Error checking Node Table")
         print(err)
+
+def update_Control_Surface(nodeid,ctrtype,ctrstate):
+	try:
+		cursor = dataBase.cursor()
+		cursor.execute("Update ctrl_surf inner join Nodes Set State = %s where (Select Nodes.Loc from Nodes where NodeID = %s) = ctrl_surf.Loc and ctrl_surf.Type = %s",(ctrstate,nodeid,ctrtype))
+	except Exception as err:
+		print("Error updating control surfaces")
+		print(err)
+		
+def get_Color_Codes(ledcolor):
+	try:
+		cursor = dataBase.cursor()
+		cursor.execute('Select red,green,blue from Colors where name = %s',(ledcolor))
+		colors = cursor.fetchone()
+		return colors[0],colors[1],colors[2]
+	except Exception as err:
+		print("Error getting color codes data")
+		print(err)

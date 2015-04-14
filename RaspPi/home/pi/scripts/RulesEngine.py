@@ -1,28 +1,31 @@
 import json
-from dBComm import get_Rules
+import dBComm
 import time
+from nodeComm import Node_Send_Command
 
 #Checking Node data against Rules
 def check_vs_Rules(nodedict):
-	data,title = get_Rules()
+	data,title = dBComm.get_Rules()
 	for rule in data:
 		ifcondition = ""
 		str_rule = rule[0]
 		json_data = json.loads(str_rule)
 		condition = json_data['if']
 		conditions = condition['condition']
+		result = json_data['then']
+		results = result['result']
 		#check to see if the Rule needs to run once or more than once
 		if 'nodeall' in str_rule and not 'nodeany' in str_rule or  'nodeexact' in str_rule:
 			ifcondition = ifcondition_Creation("",conditions,nodedict,None)
-			print('Once')
-			print(ifcondition)
 			print(eval(ifcondition))
+			if eval(ifcondition) == True:
+				resultcondition_Creation(results,nodedict,None)
 		else:
 			for node in nodedict:
 				ifcondition = ifcondition_Creation("",conditions,nodedict,node)
-				print('Many')
-				print(ifcondition)
 				print(eval(ifcondition))
+				if eval(ifcondition) == True:
+					resultcondition_Creation(results,nodedict,node)
 
 #Creation of ifcondition	
 def ifcondition_Creation(ifcondition,conditions, nodedict, node):
@@ -115,7 +118,7 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 					ifcondition = ifcondition + " "  + rightvar
 			if rightype == 'system':
 				if rightvar == 'restricted_time_start':
-					ifcondition = ifcondition + " " + str(30)	
+					ifcondition = ifcondition + " " + str(300000)	
 				if rightvar == 'restricted_time_end':
 					ifcondition = ifcondition + " " + str(5)
 				if rightvar == 'desired_temp':
@@ -123,3 +126,38 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 			if joiner != 'na':
 				ifcondition = ifcondition + " " + joiner
 	return ifcondition
+
+#Retrieving and executing all results
+def resultcondition_Creation(results,nodedict,node):
+	for idx, each in enumerate(results):				
+			sound = results[idx]['sound']
+			lednodetype = results[idx]['lednodetype']
+			ledcolor = results[idx]['ledcolor']
+			ctrnodeloc = results[idx]['ctrnodeloc']
+			ctrtype = results[idx]['ctrtype']
+			ctrstate = results[idx]['ctrstate']
+			log = results[idx]['log']
+
+			if ctrnodeloc == 'same':
+				#Update the Control Surfaces State for the given node
+				dBComm.update_Control_Surface(node.id,ctrtype,ctrstate)			
+			if ctrnodeloc == 'all':
+				#Updating all nodes Control Surfaces States
+				for node in nodedict:
+					#Update the Control Surfaces State for the given node
+					dBComm.update_Control_Surface(node.id,ctrtype,ctrstate)		
+			
+			if sound == 'nodeall' or 'nodeany' or 'nodeexact':
+				sound = 1
+			else:
+				sound = 0
+			
+			if ledcolor or lednodetype != 'na':
+				#(sound,red,green,blue,loops(1-9),delay(1-9))
+				red,green,blue = dBComm.get_Color_Codes(ledcolor)
+				data = "%s,%s,%s,%s,%s,%s",(sound,red,green,blue,4,3)
+			if lednodetype == 'nodeall':
+				for node in nodedict: 
+					Node_Send_Command(node.ip,data,node.id)
+			
+				

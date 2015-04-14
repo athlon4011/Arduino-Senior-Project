@@ -8,9 +8,6 @@ import RulesEngine
 #if running end this process, if not continue running script
 Functions.check_for_running()
 
-#(sound,red,green,blue,loops(1-9),delay(1-9))
-#data = "1,111"	
-
 #Runs Forever
 while 1:
 	nodedict = []
@@ -26,7 +23,7 @@ while 1:
 		json_file = Functions.convert_String_ToJSON(nodeData)
 		
 		#Stores NodeID/Node Json into nodedict
-		nodedict.append(Functions.tempNodeArray(node['NodeID'],json_file))
+		nodedict.append(Functions.tempNodeArray(node['NodeID'],node['IP'],json_file))
 
 		#Checks to see if current data is equal to last entry
 		#if not store the json
