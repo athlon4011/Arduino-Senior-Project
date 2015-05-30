@@ -14,21 +14,7 @@ def check_vs_Rules(nodedict):
 		conditions = condition['condition']
 		result = json_data['then']
 		results = result['result']
-		#check to see if the Rule needs to run once or more than once
-		if 'nodeall' in str_rule and not 'nodeany' in str_rule or  'nodeexact' in str_rule:
-			ifcondition = ifcondition_Creation("",conditions,nodedict,None)
-			print(eval(ifcondition))
-			if eval(ifcondition) == True:
-				resultcondition_Creation(results,nodedict,None)
-		else:
-			for node in nodedict:
-				ifcondition = ifcondition_Creation("",conditions,nodedict,node)
-				print(eval(ifcondition))
-				if eval(ifcondition) == True:
-					resultcondition_Creation(results,nodedict,node)
-
-#Creation of ifcondition	
-def ifcondition_Creation(ifcondition,conditions, nodedict, node):
+		#check to see if the Rule needs to run once or more than once2
 	for idx, each in enumerate(conditions):				
 			modifier = conditions[idx]['modifier']
 			leftype = conditions[idx]['leftype']
@@ -40,7 +26,7 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 			#LEFT SIDE OF OPERAND
 			#NODE ALL TYPE
 			if leftype == 'nodeall':
-				if leftvar == 'temp':
+				if leftvar == 'temp':2222
 					if modifier == 'avg':
 						sum = 0.0
 						for node in nodedict:
@@ -60,7 +46,7 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 					# else modifier == 'na':
 						# #Not sure if this will ever happen with a nodeall
 						# continue
-				if leftvar == 'lux':
+				elif leftvar == 'lux':
 					if modifier == 'avg':
 						sum = 0.0
 						for node in nodedict:
@@ -80,7 +66,7 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 					# else modifier == 'na':
 						# #Not sure if this will ever happen with a nodeall
 						# continue
-				if leftvar == 'motion':
+				elif leftvar == 'motion':
 					if modifier == 'avg':
 						sum = 0.0
 						for node in nodedict:
@@ -104,24 +90,24 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 			elif leftype == 'nodeany':
 				if leftvar == 'motion':
 					ifcondition =  ifcondition + " "  + node.motion + " " + operand
-				if leftvar == 'lux':
+				elif leftvar == 'lux':
 					ifcondition =  ifcondition + " " + node.lux+ " " + operand
-				if leftvar == 'temp':
+				elif leftvar == 'temp':
 					ifcondition = ifcondition + " " + node.temp + " " + operand
 			#SERVER TYPE
-			if leftype == 'server':
+			elif leftype == 'server':
 				if leftvar == 'current_time':
 					current_time = int(time.time())
 					ifcondition =  ifcondition + " " + str(current_time) + " " + operand
 			#RIGHT SIDE OF OPERAND
 			if rightype == 'numbervalue':
 					ifcondition = ifcondition + " "  + rightvar
-			if rightype == 'system':
+			elif rightype == 'system':
 				if rightvar == 'restricted_time_start':
 					ifcondition = ifcondition + " " + str(300000)	
-				if rightvar == 'restricted_time_end':
+				elif rightvar == 'restricted_time_end':
 					ifcondition = ifcondition + " " + str(5)
-				if rightvar == 'desired_temp':
+				elif rightvar == 'desired_temp':
 					ifcondition = ifcondition + " " + str(15)
 			if joiner != 'na':
 				ifcondition = ifcondition + " " + joiner
@@ -137,27 +123,31 @@ def resultcondition_Creation(results,nodedict,node):
 			ctrtype = results[idx]['ctrtype']
 			ctrstate = results[idx]['ctrstate']
 			log = results[idx]['log']
-
 			if ctrnodeloc == 'same':
 				#Update the Control Surfaces State for the given node
 				dBComm.update_Control_Surface(node.id,ctrtype,ctrstate)			
-			if ctrnodeloc == 'all':
+			elif ctrnodeloc == 'all':
 				#Updating all nodes Control Surfaces States
-				for node in nodedict:
+				for Anode in nodedict:
 					#Update the Control Surfaces State for the given node
-					dBComm.update_Control_Surface(node.id,ctrtype,ctrstate)		
-			
-			if sound == 'nodeall' or 'nodeany' or 'nodeexact':
-				sound = 1
-			else:
+					dBComm.update_Control_Surface(Anode.id,ctrtype,ctrstate)	
+			if sound == 'na':
 				sound = 0
+			else:
+				sound = 1
 			
 			if ledcolor or lednodetype != 'na':
 				#(sound,red,green,blue,loops(1-9),delay(1-9))
 				red,green,blue = dBComm.get_Color_Codes(ledcolor)
-				data = "%s,%s,%s,%s,%s,%s",(sound,red,green,blue,4,3)
+				data = str(sound) + ',' + red + ',' + green + ',' + blue)+ ',' + str(4) + ',' + str(3)
+				print (data)
 			if lednodetype == 'nodeall':
-				for node in nodedict: 
-					Node_Send_Command(node.ip,data,node.id)
+				for Anode in nodedict: 
+					Node_Send_Command(Anode.ip,data,Anode.id)
+			if lednodetype == 'nodeany':
+				Node_Send_Command(node.ip,data,node.id)
+			
+			log = 'Node ' + str(node.id)
+				
 			
 				

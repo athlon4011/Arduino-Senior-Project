@@ -21,14 +21,15 @@ def mysql_fetch_assoc():
 	try:
 		cursor = dataBase.cursor()
 		cursor.execute("Select NodeID,IP from Nodes")
-		rows = cursor.fetchall()    
-		for row in rows:        
+		rows = cursor.fetchall()	
+		for row in rows:    
 			data ={}
-			for i in range(len(row)):          
-			    if row[i] != None:                        
+			for i in range(len(row)):
+				if row[i] != None:
 				    tmp = cursor.description            
 				    data[tmp[i][0]] = row[i]
-                out.append(data)     
+			out.append(data)
+			print(out)
 	except Exception as err:
 		print("Error in fetchassoc:")
 		print(err)
@@ -103,6 +104,11 @@ def get_Color_Codes(ledcolor):
 		cursor = dataBase.cursor()
 		cursor.execute('Select red,green,blue from Colors where name = %s',(ledcolor))
 		colors = cursor.fetchone()
+		for color in colors:
+			color = str(color)
+			while len(color) < 3:
+				color = '0' + color
+			print(color)
 		return colors[0],colors[1],colors[2]
 	except Exception as err:
 		print("Error getting color codes data")

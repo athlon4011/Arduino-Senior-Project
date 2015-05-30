@@ -15,7 +15,6 @@ while 1:
 	for node in dBComm.mysql_fetch_assoc():
 		#Testing Send command to node
 		#nodeComm.Node_Send_Command(node['IP'],data,node['NodeID'])
-		
 		#Collects Nodes Sensor data (String Form)
 		nodeData = nodeComm.Node_Data_Request(node['IP'],node['NodeID'])
 		
