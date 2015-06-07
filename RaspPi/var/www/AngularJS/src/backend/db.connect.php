@@ -17,20 +17,75 @@ function mysql_to_mysqli($stmt, $link) {
 }
 //getData($link);
 
-if(isset($_POST['type'])) {
-	switch($_POST['type']) {
+if(isset($_GET['type'])) {
+	switch($_GET['type']) {
 		case 'nodeData':
-		getData($link);
+			getData($link);
+		break;
+		case 'eventLog':
+			eventLog($link);
 		break;
 		case 'rulesGet':
-		
+			rulesGet($link);
 		break;
 		case 'rulesSet':
-		
+			if(isset($_GET['rid'])) {
+				rulesSet($link,$_GET['rid']);
+			} else {
+				wrongCall();
+			}
 		break;
 		case 'test':
+			wrongCall();
+		break;
+		default:
+			wrongCall();	
 		break;
 	}
+} else {
+	wrongCall();
+}
+
+function wrongCall() {
+	echo "Invalid request. Check Documentation.";
+	exit;
+}
+
+function rulesSet($link,$rid) {
+	$stmt="SELECT * FROM Rules where rid=$rid;";
+	$result = mysqli_fetch_row(mysql_to_mysqli($stmt, $link));
+	//print_r($result);
+	echo $result[2];
+	if($result[2] == 1) {
+		$bool = 0;
+	} else {
+		$bool = 1;
+	};
+	$stmt="UPDATE Rules SET enabled=$bool WHERE rid=$rid;";
+	mysql_to_mysqli($stmt, $link);
+	exit;
+}
+
+function rulesGet($link) {
+	$stmt="SELECT * FROM Rules;";
+	$result = "";
+	foreach(mysql_to_mysqli($stmt, $link) as $row) {
+		$result .= "{ID: \"".$row['rid']."\",Enabled: ".$row['enabled'].",Title: \"".$row['Title']."\",Description: \"".$row['Description']."\"},";
+	}
+	$result = rtrim($result, ",");
+	echo $result;
+	exit;
+}
+
+function eventLog($link) {
+	$stmt="SELECT * FROM Event_Log LIMIT 100;";
+	$result = "";
+	foreach(mysql_to_mysqli($stmt, $link) as $row) {
+		$result .= "{Date: \"".$row['Date']."\",Type: \"".$row['Type']."\",Message: \"".$row['Message']."\"},";
+	}
+	$result = rtrim($result, ",");
+	echo $result;
+	exit;
 }
 
 function getData($link) {
@@ -38,7 +93,7 @@ function getData($link) {
 	$result = "";
 	foreach(mysql_to_mysqli($stmt, $link) as $row) {
 		$result .= "{\"NodeID\":".$row['NodeID'].",\"node\":[";
-		$stmt1="SELECT Date, Data FROM homer.Sensor_Log where NodeID='".$row['NodeID']."' order by Date desc LIMIT 50;";
+		$stmt1="SELECT Date, Data FROM Sensor_Log where NodeID='".$row['NodeID']."' order by Date desc LIMIT 50;";
 		foreach(mysql_to_mysqli($stmt1, $link) as $row1) {
 			//echo $row1['Data'];
 			$newstr = substr_replace($row1['Data'], "\"Date\": \"".$row1['Date']."\",", 1, 0);
@@ -51,6 +106,7 @@ function getData($link) {
 	$result = rtrim($result, ",");
 	//echo "<pre>";
 	echo $result;
+	exit;
 }
 
 
