@@ -1,3 +1,46 @@
-﻿
-    <h3>createNew</h3>
-    <p>{{message}}</p>
+﻿<div class="panel-body">
+    <form class="form-inline" data-ng-submit="submitTempForm(TempForm.$valid)" name="TempForm">
+        <div class="form-group required" data-ng-class="{ 'has-error' : TempForm.desiredLowTemp.$invalid && !TempForm.desiredLowTemp.$pristine }">
+            <label class=" control-label" for="desiredLowTemp">Desired Lowest Temperature:</label>
+            <input class="form-control RuleForm" data-ng-model="LowTemp" data-ng-disabled="formEnable" placeholder="Enter lowest desired temperature" name="desiredLowTemp" required />
+            <label class="control-label">{{degree}}</label>
+        </div>
+        <div class="form-group required" data-ng-class="{ 'has-error' : TempForm.desiredHighTemp.$invalid && !TempForm.desiredHighTemp.$pristine }">
+            <label class=" control-label" for="desiredHighTemp">
+                Desired Highest Temperature:
+            </label>
+            <input class="form-control RuleForm" data-ng-model="HighTemp" data-ng-disabled="formEnable" placeholder="Enter highest desired temperature" name="desiredHighTemp" required />
+            <label>{{degree}}</label>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-default" data-ng-click="EditButton()" data-ng-show="formEnable">Edit</button>
+            <button type="submit" class="btn btn-default" data-ng-show="!formEnable">Submit</button>
+            <button type="button" class="btn btn-default" data-ng-click="CancelButton()" data-ng-show="!formEnable">Cancel</button>
+        </div>
+    </form>
+</div>
+<div class="panel-footer">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Enabled
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="item in items">
+                <td>{{item.Title}}</td>
+                <td> {{item.Description}}</td>
+                <td> <input type="checkbox" data-ng-model="item.Enabled" data-ng-change="Test(item.ID,item.Enabled)" /></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

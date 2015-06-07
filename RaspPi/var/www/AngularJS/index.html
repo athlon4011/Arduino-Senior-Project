@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <title>AngularJS practice</title>
+    <!--Required Scripts-->
+    <script src="src/scripts/angular.js"></script>
+    <!--<script src="src/scripts/bootstrap.js"></script>-->
+    <script src="src/scripts/angular-route.min.js"></script>
+    <!--Custom Scripts-->
+    <script src="src/app/scripts/Module/app.js"></script>
+    <script src="src/app/scripts/Config/config.js"></script>
+    <script src="src/app/scripts/Controllers/mainPage.js"></script>
+    <script src="src/app/scripts/Controllers/SimHouse.js"></script>
+    <script src="src/app/scripts/Controllers/Rules.js"></script>
+    <script src="src/app/scripts/Services/Service.js"></script>
+    <!--StyleSheets-->
+    <link rel="stylesheet" href="src/style/bootstrap.css" />
+    <link rel="stylesheet" href="src/style/Homer.css" />
+
+    
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid navContainer">
+            <div id="navbar" class=" navbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="#/Home">Home<span class="sr-only">active</span></a></li>
+                    <li><a href="#/Rules">Rules Engine</a></li>
+                    <li><a href="#/SimHouse">Simulated House</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="col-md-8">
+            <div class="panel">
+                <div class="panel-heading"></div>
+                <div data-ng-view></div>
+            </div>
+        </div>
+        <div ng-controller="mainPageController"class="col-md-4">
+            <div class="panel">
+                <div class="panel-heading"></div>
+                <div data-ng-include="'src/app/templates/EventLog.html'"></div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

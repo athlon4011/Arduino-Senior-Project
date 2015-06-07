@@ -1,0 +1,18 @@
+﻿html, body {
+    max-height:1500px;
+    max-width:1920px;
+    min-height: 700px;
+    min-width:1300px;
+    background:gray;
+}
+
+.RuleForm{
+    width: 400px;
+}
+
+.panel{
+    border: 2px solid black;
+    height: 800px; 
+    background:white;
+    overflow-y:scroll;
+}
