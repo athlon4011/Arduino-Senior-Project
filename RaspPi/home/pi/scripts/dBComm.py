@@ -104,12 +104,14 @@ def get_Color_Codes(ledcolor):
 		cursor = dataBase.cursor()
 		cursor.execute('Select red,green,blue from Colors where name = %s',(ledcolor))
 		colors = cursor.fetchone()
-		for color in colors:
+		colorsArray = []
+		for idx,color in enumerate(colors):
 			color = str(color)
 			while len(color) < 3:
 				color = '0' + color
-			print(color)
-		return colors[0],colors[1],colors[2]
+			colorsArray.append(color)
+
+		return colorsArray[0],colorsArray[1],colorsArray[2]
 	except Exception as err:
 		print("Error getting color codes data")
 		print(err)

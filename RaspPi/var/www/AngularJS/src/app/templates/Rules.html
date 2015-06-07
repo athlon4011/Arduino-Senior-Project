@@ -1,18 +1,24 @@
 ﻿<div class="panel-body">
-    <form class="form-inline" data-ng-submit="submitTempForm(TempForm.$valid)" name="TempForm">
-        <div class="form-group required" data-ng-class="{ 'has-error' : TempForm.desiredLowTemp.$invalid && !TempForm.desiredLowTemp.$pristine }">
-            <label class=" control-label" for="desiredLowTemp">Desired Lowest Temperature:</label>
-            <input class="form-control RuleForm" data-ng-model="LowTemp" data-ng-disabled="formEnable" placeholder="Enter lowest desired temperature" name="desiredLowTemp" required />
+    <form class="form-horizontal" data-ng-submit="submitCtrlForm(CtrlForm.$valid)" id="CtrlForm" name="CtrlForm">
+        <div class="form-group required col-sm-12" data-ng-class="{ 'has-error' : CtrlForm.desiredLowTemp.$invalid && !CtrlForm.desiredLowTemp.$pristine }">
+            <label class=" control-label col-sm-3" for="desiredLowTemp">Desired Lowest Temperature:</label>
+            <input class="form-control RuleForm col-sm-2" type="number" data-ng-model="CtrlFormData['LowTemp']" data-ng-disabled="formEnable" placeholder="Enter lowest desired temperature" name="desiredLowTemp" required />
             <label class="control-label">{{degree}}</label>
         </div>
-        <div class="form-group required" data-ng-class="{ 'has-error' : TempForm.desiredHighTemp.$invalid && !TempForm.desiredHighTemp.$pristine }">
-            <label class=" control-label" for="desiredHighTemp">
-                Desired Highest Temperature:
-            </label>
-            <input class="form-control RuleForm" data-ng-model="HighTemp" data-ng-disabled="formEnable" placeholder="Enter highest desired temperature" name="desiredHighTemp" required />
+        <div class="form-group required col-sm-12" data-ng-class="{ 'has-error' : CtrlForm.desiredHighTemp.$invalid && !CtrlForm.desiredHighTemp.$pristine }">
+            <label class=" control-label col-sm-3" for="desiredHighTemp">Desired Highest Temperature:</label>
+            <input class="form-control RuleForm col-sm-2" type="number" data-ng-model="CtrlFormData.HighTemp" data-ng-disabled="formEnable" placeholder="Enter highest desired temperature" name="desiredHighTemp" required />
             <label>{{degree}}</label>
         </div>
-        <div class="form-group">
+        <div class="form-group required col-sm-12" data-ng-class="{ 'has-error' : CtrlForm.restrictedStartTime.$invalid && !CtrlForm.restrictedStartTime.$pristine }">
+            <label class=" control-label col-sm-3" for="restrictedStartTime">Restricted Start Time:</label>
+            <input class="form-control RuleForm col-sm-2" data-ng-model="CtrlFormData.restrictedStartTime" type="time" data-ng-disabled="formEnable" name="restrictedStartTime" required />
+        </div>
+        <div class="form-group required col-sm-12" data-ng-class="{ 'has-error' : CtrlForm.restrictedEndTime.$invalid && !CtrlForm.restrictedEndTime.$pristine }">
+            <label class=" control-label col-sm-3" for="restrictedEndTime">Restricted End Time:</label>
+            <input class="form-control RuleForm col-sm-2" data-ng-model="CtrlFormData.restrictedEndTime" type="time" data-ng-disabled="formEnable" name="restrictedEndTime" required />
+        </div>
+        <div class="form-group col-sm-12">
             <button type="button" class="btn btn-default" data-ng-click="EditButton()" data-ng-show="formEnable">Edit</button>
             <button type="submit" class="btn btn-default" data-ng-show="!formEnable">Submit</button>
             <button type="button" class="btn btn-default" data-ng-click="CancelButton()" data-ng-show="!formEnable">Cancel</button>

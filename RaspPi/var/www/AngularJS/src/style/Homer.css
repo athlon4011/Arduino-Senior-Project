@@ -2,8 +2,8 @@
     max-height:1500px;
     max-width:1920px;
     min-height: 700px;
-    min-width:1300px;
-    background:gray;
+    min-width:1200px;
+    background:grey;
 }
 
 .RuleForm{
@@ -13,6 +13,17 @@
 .panel{
     border: 2px solid black;
     height: 800px; 
+    background:white;
+    overflow-y:scroll;
+}
+
+#CtrlForm label{
+    text-align: left;
+}
+
+.panel-body .panel{
+    border: 2px solid black;
+    height: 400px; 
     background:white;
     overflow-y:scroll;
 }

@@ -1,4 +1,4 @@
-﻿app.controller('RulesController', ['$scope', function ($scope) {
+﻿app.controller('RulesController', ['$scope','$filter', function ($scope, $filter) {
 
     $scope.formEnable = true;
     $scope.degree = '\xB0' + 'F';
@@ -12,12 +12,23 @@
     $scope.CancelButton = function () {
         $scope.formEnable = true;
     }
+    $scope.CtrlFormData = {
+        LowTemp: 75,
+        HighTemp: 95,
+        restrictedStartTime: '',
+        restrictedEndTime:'',
+    }
+
+
+
 
     //Will send submitted Desired Temp information to SQL Server
-    $scope.submitTempForm = function () {
-        if ($scope.TempForm.$valid) {
+    $scope.submitCtrlForm = function () {
+        if ($scope.CtrlForm.$valid) {
             //Send the Temp information to Server
+            alert(JSON.stringify($scope.CtrlFormData));
         }
+        $scope.formEnable = true;
     }
 
 

@@ -14,6 +14,21 @@ def check_vs_Rules(nodedict):
 		conditions = condition['condition']
 		result = json_data['then']
 		results = result['result']
+		#check to see if the Rule needs to run once or more than once
+		if 'nodeall' in str_rule and not 'nodeany' in str_rule or  'nodeexact' in str_rule:
+			ifcondition = ifcondition_Creation("",conditions,nodedict,None)
+			print(eval(ifcondition))
+			if eval(ifcondition) == True:
+				resultcondition_Creation(results,nodedict,None)
+		else:
+			for node in nodedict:
+				ifcondition = ifcondition_Creation("",conditions,nodedict,node)
+				print(eval(ifcondition))
+				if eval(ifcondition) == True:
+					resultcondition_Creation(results,nodedict,node)
+
+#Creation of ifcondition	
+def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 		#check to see if the Rule needs to run once or more than once2
 	for idx, each in enumerate(conditions):				
 			modifier = conditions[idx]['modifier']
@@ -26,7 +41,7 @@ def check_vs_Rules(nodedict):
 			#LEFT SIDE OF OPERAND
 			#NODE ALL TYPE
 			if leftype == 'nodeall':
-				if leftvar == 'temp':2222
+				if leftvar == 'temp':
 					if modifier == 'avg':
 						sum = 0.0
 						for node in nodedict:
@@ -139,15 +154,15 @@ def resultcondition_Creation(results,nodedict,node):
 			if ledcolor or lednodetype != 'na':
 				#(sound,red,green,blue,loops(1-9),delay(1-9))
 				red,green,blue = dBComm.get_Color_Codes(ledcolor)
-				data = str(sound) + ',' + red + ',' + green + ',' + blue)+ ',' + str(4) + ',' + str(3)
+				data = str(sound) + ',' + str(red) + ',' + str(green) + ',' + str(blue) + ',' + str(4) + ',' + str(3)
 				print (data)
 			if lednodetype == 'nodeall':
 				for Anode in nodedict: 
 					Node_Send_Command(Anode.ip,data,Anode.id)
+					log = 'Node ' + str(Anode.id) + log
+					dBComm.log_Event('System',log)
 			if lednodetype == 'nodeany':
-				Node_Send_Command(node.ip,data,node.id)
-			
-			log = 'Node ' + str(node.id)
-				
-			
+				Node_Send_Command(node.ip,data,node.id)						
+				log = 'Node ' + str(node.id) +': ' + log
+				dBComm.log_Event('System',log)
 				
