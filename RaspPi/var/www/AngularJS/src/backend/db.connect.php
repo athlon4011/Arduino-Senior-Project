@@ -35,6 +35,14 @@ if(isset($_GET['type'])) {
 				wrongCall();
 			}
 		break;
+		case 'settings':
+			if(isset($_GET['start']) && isset($_GET['end']) && isset($_GET['cool']) && isset($_GET['heat'])) {
+				unset($_GET['type']);
+				updateSettings($link, json_encode($_GET));
+			} else {
+				wrongCall();
+			}
+		break;
 		case 'test':
 			wrongCall();
 		break;
@@ -48,6 +56,12 @@ if(isset($_GET['type'])) {
 
 function wrongCall() {
 	echo "Invalid request. Check Documentation.";
+	exit;
+}
+
+function updateSettings($link, $params) {
+	$stmt = "UPDATE Settings SET Settings='$params' WHERE PID='1';"
+	mysql_to_mysqli($stmt, $link);
 	exit;
 }
 
@@ -68,29 +82,37 @@ function rulesSet($link,$rid) {
 
 function rulesGet($link) {
 	$stmt="SELECT * FROM Rules;";
-	$result = "";
+	$result = "[";
 	foreach(mysql_to_mysqli($stmt, $link) as $row) {
-		$result .= "{ID: \"".$row['rid']."\",Enabled: ".$row['enabled'].",Title: \"".$row['Title']."\",Description: \"".$row['Description']."\"},";
+		if($row['enabled'] == 1) {
+			$bool = "true";
+		} else {
+			$bool = "false";
+		}
+		//$result .= "{ID: '".$row['rid']."',Enabled: $bool,Title: '".$row['Title']."',Description: '".$row['Description']."'},";
+		$result .= "{\"ID\": \"".$row['rid']."\",\"Enabled\": $bool,\"Title\": \"".$row['Title']."\",\"Description\": \"".$row['Description']."\"},";
 	}
 	$result = rtrim($result, ",");
+	$result .= "]";
 	echo $result;
 	exit;
 }
 
 function eventLog($link) {
-	$stmt="SELECT * FROM Event_Log LIMIT 100;";
-	$result = "";
+	$stmt="SELECT * FROM Event_Log order by Date desc LIMIT 100;";
+	$result = "[";
 	foreach(mysql_to_mysqli($stmt, $link) as $row) {
-		$result .= "{Date: \"".$row['Date']."\",Type: \"".$row['Type']."\",Message: \"".$row['Message']."\"},";
+		$result .= "{\"Date\": \"".$row['Date']."\",\"Type\": \"".$row['Type']."\",\"Message\": \"".$row['Message']."\"},";
 	}
 	$result = rtrim($result, ",");
+	$result .= "]";
 	echo $result;
 	exit;
 }
 
 function getData($link) {
 	$stmt="SELECT * FROM Nodes;";
-	$result = "";
+	$result = "[";
 	foreach(mysql_to_mysqli($stmt, $link) as $row) {
 		$result .= "{\"NodeID\":".$row['NodeID'].",\"node\":[";
 		$stmt1="SELECT Date, Data FROM Sensor_Log where NodeID='".$row['NodeID']."' order by Date desc LIMIT 50;";
@@ -105,6 +127,7 @@ function getData($link) {
 	}
 	$result = rtrim($result, ",");
 	//echo "<pre>";
+	$result .= "]";
 	echo $result;
 	exit;
 }
