@@ -12,11 +12,11 @@
         </div>
         <div class="form-group required col-sm-12" data-ng-class="{ 'has-error' : CtrlForm.restrictedStartTime.$invalid && !CtrlForm.restrictedStartTime.$pristine }">
             <label class=" control-label col-sm-3" for="restrictedStartTime">Restricted Start Time:</label>
-            <input class="form-control RuleForm col-sm-2" data-ng-model="CtrlFormData.restrictedStartTime" type="time" data-ng-disabled="formEnable" name="restrictedStartTime" required />
+            <input class="form-control RuleForm col-sm-2" data-ng-model="restrictedStartTime" type="time" data-ng-disabled="formEnable" name="restrictedStartTime" required />
         </div>
         <div class="form-group required col-sm-12" data-ng-class="{ 'has-error' : CtrlForm.restrictedEndTime.$invalid && !CtrlForm.restrictedEndTime.$pristine }">
             <label class=" control-label col-sm-3" for="restrictedEndTime">Restricted End Time:</label>
-            <input class="form-control RuleForm col-sm-2" data-ng-model="CtrlFormData.restrictedEndTime" type="time" data-ng-disabled="formEnable" name="restrictedEndTime" required />
+            <input class="form-control RuleForm col-sm-2" data-ng-model="restrictedEndTime" type="time" data-ng-disabled="formEnable" name="restrictedEndTime" required />
         </div>
         <div class="form-group col-sm-12">
             <button type="button" class="btn btn-default" data-ng-click="EditButton()" data-ng-show="formEnable">Edit</button>
@@ -44,7 +44,7 @@
             <tr data-ng-repeat="item in items">
                 <td>{{item.Title}}</td>
                 <td> {{item.Description}}</td>
-                <td> <input type="checkbox" data-ng-model="item.Enabled" data-ng-change="Test(item.ID,item.Enabled)" /></td>
+                <td> <input type="checkbox" data-ng-model="item.Enabled" data-ng-change="Test(item.ID)" /></td>
             </tr>
         </tbody>
     </table>

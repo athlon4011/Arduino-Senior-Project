@@ -17,13 +17,13 @@ def check_vs_Rules(nodedict):
 		#check to see if the Rule needs to run once or more than once
 		if 'nodeall' in str_rule and not 'nodeany' in str_rule or  'nodeexact' in str_rule:
 			ifcondition = ifcondition_Creation("",conditions,nodedict,None)
-			print(eval(ifcondition))
+			print(ifcondition)
 			if eval(ifcondition) == True:
 				resultcondition_Creation(results,nodedict,None)
 		else:
 			for node in nodedict:
 				ifcondition = ifcondition_Creation("",conditions,nodedict,node)
-				print(eval(ifcondition))
+				print(ifcondition)
 				if eval(ifcondition) == True:
 					resultcondition_Creation(results,nodedict,node)
 
@@ -113,6 +113,12 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 			elif leftype == 'server':
 				if leftvar == 'current_time':
 					current_time = int(time.time())
+					current_time = time.strftime("%H:%M", time.localtime(current_time))
+					current_time = current_time.split(':')
+					hours_to_seconds = int(current_time[0]) * 3600
+					minutes_to_seconds = int(current_time[1]) * 60
+					current_time = hours_to_seconds + minutes_to_seconds
+					print(current_time)
 					ifcondition =  ifcondition + " " + str(current_time) + " " + operand
 			#RIGHT SIDE OF OPERAND
 			if rightype == 'numbervalue':

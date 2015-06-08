@@ -7,38 +7,19 @@
                     <thead>
                         <tr>
                             <th>
-                                Node ID
-                            </th>
-                            <th>
                                 Date
                             </th>
-                            <th>
-                                Data
-                            </th>
+                            <th>Lux</th>
+                            <th>Motion</th>
+                            <th>Temperature</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr data-ng-repeat="item in node.node">
-                            <td>{{node.NodeID}}</td>
                             <td> {{item.Date}}</td>
-                            <td>
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Lux</th>
-                                            <th>Motion</th>
-                                            <th>Temperature</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{{item.Data.lux}}</td>
-                                            <td>{{item.Data.motion}}</td>
-                                            <td>{{item.Data.temp}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
+                            <td>{{item.lux}}</td>
+                            <td>{{item.motion}}</td>
+                            <td>{{item.temp}}</td>
                         </tr>
                     </tbody>
                 </table>
