@@ -25,7 +25,7 @@ float sensor_reading = 0.0;        // variable to store the value coming from th
 float vref = 1.04;        // variable to store the voltage reference used (check for validity with a DMM)
 float fahrenheit = 0.0;        // variable to store the actual temperature
 float centigrade = 0.0;
-boolean debug = false;
+boolean debug = true;
 boolean boot = true;
 
 
@@ -74,7 +74,8 @@ Udp.flush();
 }
 
 void loop() {  
-
+  //getLux();
+  //delay(1000);
   receivePacket();
 
 }

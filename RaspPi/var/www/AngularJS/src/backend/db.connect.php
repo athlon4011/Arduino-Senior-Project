@@ -60,7 +60,7 @@ function wrongCall() {
 }
 
 function updateSettings($link, $params) {
-	$stmt = "UPDATE Settings SET Settings='$params' WHERE PID='1';"
+	$stmt = "UPDATE Settings SET Settings='".$params."' WHERE PID='1';";
 	mysql_to_mysqli($stmt, $link);
 	exit;
 }
