@@ -43,6 +43,9 @@ if(isset($_GET['type'])) {
 				wrongCall();
 			}
 		break;
+		case 'getSettings':
+			getSettings($link);
+		break;
 		case 'test':
 			wrongCall();
 		break;
@@ -57,6 +60,15 @@ if(isset($_GET['type'])) {
 function wrongCall() {
 	echo "Invalid request. Check Documentation.";
 	exit;
+}
+
+function getSettings($link) {
+	$stmt="SELECT Settings FROM Settings LIMIT 1;";
+	$result = mysqli_fetch_row(mysql_to_mysqli($stmt, $link));
+	//$result = rtrim($result, ",");
+	//$result .= "]";
+	echo $result['Settings'];
+	exit;		
 }
 
 function updateSettings($link, $params) {
