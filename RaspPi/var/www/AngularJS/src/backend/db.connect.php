@@ -63,17 +63,12 @@ function wrongCall() {
 }
 
 function getSettings($link) {
-	$stmt="SELECT Settings FROM Settings LIMIT 1;";
-	$result = mysqli_fetch_row(mysql_to_mysqli($stmt, $link));
-	//$result = rtrim($result, ",");
-	//$result .= "]";
-	echo $result['Settings'];
-	exit;		
-}
-
-function updateSettings($link, $params) {
-	$stmt = "UPDATE Settings SET Settings='".$params."' WHERE PID='1';";
-	mysql_to_mysqli($stmt, $link);
+	$stmt="SELECT * FROM Settings LIMIT 1;";
+	$result = "";
+	foreach(mysql_to_mysqli($stmt, $link) as $row) {
+		$result .= $row['Settings'];
+	}
+	echo $result;
 	exit;
 }
 
