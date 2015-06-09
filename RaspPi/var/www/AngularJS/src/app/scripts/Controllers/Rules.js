@@ -2,10 +2,19 @@
 
     $scope.formEnable = true;
     $scope.degree = '\xB0' + 'F';
+    $scope.start = "00:00";
+    $scope.end = "00:00";
+    document.getElementById('restrictedStartTime').value = TimeCounter(0);
+    document.getElementById('restrictedEndTime').value = TimeCounter(0);
+
     Service.getRulesLog().then(function () {
         $scope.items = Service.getRules();
     });
 
+    //Service.settingsCall().then(function(){
+    //    $scope.CtrlFormData = Service.getSettings();
+    //    alert(JSON.stringify($scope.CtrlFormData));
+    //});
 
     //Edit Button
     $scope.EditButton = function () {
@@ -18,32 +27,50 @@
     }
 
     //Formats the Time's to hh:mm:ss a
-    $scope.$watch('restrictedStartTime', function (value) {
+    $scope.$watch('start', function (value) {
         time = dateFilter(value, 'HH:mm:a');
         test = time.split(":");
         HoursTOSeconds = parseInt(test[0]) * 3600;
         MinutesToSeconds = parseInt(test[1]) * 60;
         epoch = HoursTOSeconds + MinutesToSeconds;
-        $scope.CtrlFormData.restrictedStartTime =  epoch;
+        $scope.CtrlFormData['start'] =  epoch;
  
     });
-    $scope.$watch('restrictedEndTime', function (value) {
+    $scope.$watch('end', function (value) {
         time = dateFilter(value, 'HH:mm:a');
         test = time.split(":");
         HoursTOSeconds = parseInt(test[0]) * 3600;
         MinutesToSeconds = parseInt(test[1]) * 60;
         epoch = HoursTOSeconds + MinutesToSeconds;
-        $scope.CtrlFormData.restrictedEndTime = epoch;
+        $scope.CtrlFormData['end'] = epoch;
     });
 
     //Object Data for form
     $scope.CtrlFormData = {
-        LowTemp: 75,
-        HighTemp: 95,
-        restrictedStartTime: '' ,
-        restrictedEndTime:'',
-    }
+        cool: 75,
+        heat: 95,
+        start: '' ,
+        end: '',
+    };
 
+    //Converts Seconds to HH:mm
+    function TimeCounter(value) {
+        var t = parseInt(value);
+        var hours = parseInt(t / 3600);
+        t = t - (hours * 3600);
+        var minutes = parseInt(t / 60);
+        t = t - (minutes * 60);
+        var content = "";
+        if (hours) {
+            if (content) content += ", "; content += hours;
+        }
+        if (content)
+            content += ":";
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        }
+        content += minutes; return content;
+    }
 
 
 
@@ -51,10 +78,10 @@
     $scope.submitCtrlForm = function () {
         if ($scope.CtrlForm.$valid) {
             //Convert Object to String
-            $scope.cool = $scope.CtrlFormData.LowTemp.toString();
-            $scope.heat = $scope.CtrlFormData.HighTemp.toString();
-            $scope.start = $scope.CtrlFormData.restrictedStartTime.toString();
-            $scope.endtime = $scope.CtrlFormData.restrictedEndTime.toString();
+            cool = $scope.CtrlFormData.cool.toString();
+            heat = $scope.CtrlFormData.heat.toString();
+            start = $scope.CtrlFormData.start.toString();
+            endtime = $scope.CtrlFormData.end.toString();
             //Send variables to php
             Service.setSettings(cool, heat, start, endtime);
             $scope.formEnable = true;

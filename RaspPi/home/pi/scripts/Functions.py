@@ -13,8 +13,8 @@ class node:
 		self.ip = ip
 
 # Functions
-#Convert String to JSON
-def convert_String_ToJSON( arduinoData ):
+#Convert arduino String to JSON
+def convert_ArduinoString_ToJSON( arduinoData ):
     stringArray = arduinoData.split(',')
 
     json_file = dict([(k, v) for k,v in zip (stringArray[::2], stringArray[1::2])])
@@ -35,7 +35,14 @@ def check_for_running():
 #Storing of Node Data into Array
 def tempNodeArray(NodeID,NodeIP,data):
 	data = json.loads(data)
-	nodeobj = node(NodeID,NodeIP,data['motion'],data['lux'],data['temp'])
+	nodeobj = node(NodeID,NodeIP,data["motion"],data["lux"],data["temp"])
 	return nodeobj
-    
+
+def convert_inst_to_dict(node):
+	dict_result = dict((name, getattr(node, name)) for name in dir(node) if not name.startswith('__'))
+	return dict_result
+
+#convert string to JSON OBJECT
+def convert_String_toJSON(data):
+	return json.loads(data)
 	

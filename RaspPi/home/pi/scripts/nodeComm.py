@@ -32,9 +32,11 @@ def Node_Data_Request(NodeIP,NodeID):
         received = recv_timeout(sock)
         #Check for Null data, if so Create Error Event
         if received == '':
-            #Create Error Event
-            message = "Failed to retrieve Node "+str(NodeID)+" data."
-            dBComm.log_Event("Error",message)
+			message = "Failed to retrieve Node "+str(NodeID)+" data."
+			#check to see if last logged Message was the same if so do not log again
+			if message != dBComm.get_Last_Log_Event():
+				#Create Error Event      
+				dBComm.log_Event("Error",message)
     return received;
 
 #Waits for Data to be available on the socket

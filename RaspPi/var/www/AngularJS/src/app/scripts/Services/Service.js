@@ -2,6 +2,7 @@
     var nodeData = {};
     var event = {};
     var rules = {};
+    var settings = {};
 
     //EVENT LOG
     this.eventLog = function () {
@@ -35,7 +36,7 @@
         return deffered.promise;
     }
 
-    this.retrieveNodeData = function () {
+    this.retreiveNodeData = function () {
         return nodeData;
     }
 
@@ -68,7 +69,6 @@
     }
     //Set Settings
     this.setSettings = function (cool, heat, start, end) {
-        alert('HERE')
         var request = $http({
             url: 'src/backend/db.connect.php?type=settings&cool=' + cool + '&heat=' + heat + '&start=' + start + '&end=' + end,
             method: 'GET',
@@ -76,4 +76,23 @@
         request.success(function (data) {
         });
     };
+    //get Settings
+    this.settingsCall = function () {
+        var deffered = $q.defer();
+        var request = $http({
+            url: 'src/backend/db.connect.php?type=settingsGet',
+            method: 'GET',
+        })
+        request.success(function (data) {
+            alert(JSON.stringify(data));
+            settings = data;
+            deffered.resolve();
+        });
+        return deffered.promise;
+    }
+
+    this.getSettings = function () {
+        return settings;
+    }
+
 }]);

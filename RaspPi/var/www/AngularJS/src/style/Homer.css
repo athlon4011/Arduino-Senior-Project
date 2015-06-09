@@ -27,3 +27,15 @@
     background:white;
     overflow-y:scroll;
 }
+
+.navLogo{
+    height:100%;
+}
+.navbar-brand{
+    padding:0;
+}
+.navContainer{
+    width:90%;
+}
+
+

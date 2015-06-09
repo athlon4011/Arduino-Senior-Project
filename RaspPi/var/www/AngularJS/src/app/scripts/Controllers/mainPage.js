@@ -1,6 +1,8 @@
 ﻿app.controller('mainPageController', ['$scope', 'Service', '$interval', function ($scope, Service, $interval) {
+    $scope.Toggle = true;
+
     Service.getNodeData().then(function () {
-        $scope.Nodes = Service.retrieveNodeData();
+        $scope.Nodes = Service.retreiveNodeData();
     });
     //To grab EventLog JSON
     Service.eventLog().then(function () {
@@ -14,11 +16,29 @@
         });
         //To grab NodeLog JSON
         Service.getNodeData().then(function () {
-            $scope.Nodes = Service.retrieveNodeData();
+            $scope.Nodes = Service.retreiveNodeData();
         });
-    }, 10000);
+    }, 3000);
 
-    //Example JSON Objects
+    $scope.EventToggle = function () {
+        if ($scope.Toggle == true) {
+            $scope.Toggle = false;
+            $scope.selectedGenres = ['Alert', 'Rule'];
+            $scope.filterByGenres = function (item) {
+                return ($scope.selectedGenres.indexOf(item.Type) !== -1);
+            };
+        }
+        else {
+            $scope.filterByGenres = function (item) {
+                $scope.Toggle = true;
+                $scope.selectedGenres = ['Alert', 'Rule','Error','System'];
+                return ($scope.selectedGenres.indexOf(item.Type) !== -1);
+            };
+        }
+
+    }
+
+    ////Example JSON Objects
     //$scope.items = [
     //    {
     //        Date: '06/01/2015',
