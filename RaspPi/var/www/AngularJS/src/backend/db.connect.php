@@ -72,6 +72,12 @@ function getSettings($link) {
 	exit;
 }
 
+function updateSettings($link, $params) {
+	$stmt = "UPDATE Settings SET Settings='".$params."' WHERE PID='1';";
+	mysql_to_mysqli($stmt, $link);
+	exit;
+}
+
 function rulesSet($link,$rid) {
 	$stmt="SELECT * FROM Rules where rid=$rid;";
 	$result = mysqli_fetch_row(mysql_to_mysqli($stmt, $link));
