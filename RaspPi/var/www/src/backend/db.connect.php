@@ -128,7 +128,7 @@ function getSurface($link) {
 		} else {
 			$bool = "false";
 		}
-		$result .= "{\"nodeID\":\"".$row['NodeID']."\",\"enabled\":\"".$bool."\",\"nodeLocation\":\"".$row['Loc']."\",\"ctrlSurface\"[";
+		$result .= "{\"nodeID\":\"".$row['NodeID']."\",\"enabled\":".$bool.",\"nodeLocation\":\"".$row['Loc']."\",\"ctrlSurface\":[";
 		$stmt1="SELECT * FROM homer.ctrl_surf where Loc='".$row['Loc']."';";
 		foreach(mysql_to_mysqli($stmt1, $link) as $row1) {
 			//echo $row1['Data'];
