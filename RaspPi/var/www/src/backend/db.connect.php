@@ -57,8 +57,8 @@ if(isset($_GET['type'])) {
 			}
 		break;
 		case 'addSurface':
-			if(isset($_GET['loc']) && isset($_GET['type'])) {
-				addSurface($link,$_GET['loc'],$_GET['type']);
+			if(isset($_GET['loc']) && isset($_GET['ctrlType'])) {
+				addSurface($link,$_GET['loc'],$_GET['ctrlType']);
 			} else {
 				wrongCall();
 			}
