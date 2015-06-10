@@ -4,18 +4,29 @@
     $scope.degree = '\xB0' + 'F';
     $scope.start = "00:00";
     $scope.end = "00:00";
-    document.getElementById('restrictedStartTime').value = TimeCounter(0);
-    document.getElementById('restrictedEndTime').value = TimeCounter(0);
 
     Service.getRulesLog().then(function () {
         $scope.items = Service.getRules();
     });
 
-    //Service.settingsCall().then(function(){
-    //    $scope.CtrlFormData = Service.getSettings();
-    //    alert(JSON.stringify($scope.CtrlFormData));
-    //});
+    //Object Data for form
+    $scope.CtrlFormData = {
+        cool: '',
+        heat: '',
+        start: '',
+        end: '',
+    }
 
+
+    Service.settingsCall().then(function(){
+        $scope.Settings = Service.getSettings();
+
+        $scope.CtrlFormData.cool = parseInt($scope.Settings.cool);
+        $scope.CtrlFormData.heat = parseInt($scope.Settings.heat);
+        document.getElementById('restrictedStartTime').value = TimeCounter($scope.Settings.start);
+        document.getElementById('restrictedEndTime').value = TimeCounter($scope.Settings.end);
+
+    });
     //Edit Button
     $scope.EditButton = function () {
         $scope.formEnable = false;
@@ -26,7 +37,7 @@
         $scope.formEnable = true;
     }
 
-    //Formats the Time's to hh:mm:ss a
+    //Formats the Time's to hh:mm a
     $scope.$watch('start', function (value) {
         time = dateFilter(value, 'HH:mm:a');
         test = time.split(":");
@@ -45,14 +56,6 @@
         $scope.CtrlFormData['end'] = epoch;
     });
 
-    //Object Data for form
-    $scope.CtrlFormData = {
-        cool: 75,
-        heat: 95,
-        start: '' ,
-        end: '',
-    };
-
     //Converts Seconds to HH:mm
     function TimeCounter(value) {
         var t = parseInt(value);
@@ -62,14 +65,20 @@
         t = t - (minutes * 60);
         var content = "";
         if (hours) {
-            if (content) content += ", "; content += hours;
+            if (content)
+                content += ", ";
+            if (hours < 10)
+                content += "0" + hours;
+            else
+                content += hours;
         }
         if (content)
             content += ":";
         if (minutes < 10) {
             minutes = '0' + minutes;
         }
-        content += minutes; return content;
+        content += minutes;
+        return content;
     }
 
 

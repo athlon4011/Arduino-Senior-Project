@@ -63,13 +63,13 @@ function wrongCall() {
 }
 
 function getSettings($link) {
-	$stmt="SELECT * FROM Settings LIMIT 1;";
-	$result = "";
-	foreach(mysql_to_mysqli($stmt, $link) as $row) {
-		$result .= $row['Settings'];
-	}
-	echo $result;
-	exit;
+    $stmt="SELECT * FROM Settings LIMIT 1;";
+    $result = "";
+    foreach(mysql_to_mysqli($stmt, $link) as $row) {
+    $result .= $row['Settings'];
+    }
+    echo $result;
+    exit;
 }
 
 function updateSettings($link, $params) {

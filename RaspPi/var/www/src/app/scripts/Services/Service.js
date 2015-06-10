@@ -80,11 +80,10 @@
     this.settingsCall = function () {
         var deffered = $q.defer();
         var request = $http({
-            url: 'src/backend/db.connect.php?type=settingsGet',
+            url: 'src/backend/db.connect.php?type=getSettings',
             method: 'GET',
         })
         request.success(function (data) {
-            alert(JSON.stringify(data));
             settings = data;
             deffered.resolve();
         });
