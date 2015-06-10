@@ -46,6 +46,16 @@ if(isset($_GET['type'])) {
 		case 'getSettings':
 			getSettings($link);
 		break;
+		case 'getSurface':
+			getSurface($link);
+		break;
+		case 'removeSurface':
+			if(isset($_GET['pid'])) {
+				removeSurface($link,$_GET['pid']);
+			} else {
+				wrongCall();
+			}
+		break;
 		case 'test':
 			wrongCall();
 		break;
@@ -59,6 +69,32 @@ if(isset($_GET['type'])) {
 
 function wrongCall() {
 	echo "Invalid request. Check Documentation.";
+	exit;
+}
+
+function removeSurface($link,$pid) {
+	$stmt = "DELETE FROM ctrl_surf WHERE PID='$pid';";
+	mysql_to_mysqli($stmt, $link);
+	exit;
+}
+
+function getSurface($link) {
+	$stmt="SELECT * FROM Nodes;";
+	$result = "[";
+	foreach(mysql_to_mysqli($stmt, $link) as $row) {
+		$result .= "{\"nodeID\":\"".$row['NodeID']."\",\"nodeLocation\":\"".$row['Loc']."\",\"ctrlSurface\"[";
+		$stmt1="SELECT * FROM homer.ctrl_surf where Loc='".$row['Loc']."';";
+		foreach(mysql_to_mysqli($stmt1, $link) as $row1) {
+			//echo $row1['Data'];
+			$result .= "{\"pid\": \"".$row1['PID']."\",\"type\": \"".$row1['Type']."\",\"Status\": \"".$row1['State']."\"},";
+		}
+		$result = rtrim($result, ",");
+		$result .= "]},";
+	}
+	$result = rtrim($result, ",");
+	//echo "<pre>";
+	$result .= "]";
+	echo $result;
 	exit;
 }
 
@@ -124,7 +160,7 @@ function eventLog($link) {
 }
 
 function getData($link) {
-	$stmt="SELECT * FROM Nodes;";
+	$stmt="SELECT * FROM Nodes where type='data';";
 	$result = "[";
 	foreach(mysql_to_mysqli($stmt, $link) as $row) {
 		$result .= "{\"NodeID\":".$row['NodeID'].",\"node\":[";

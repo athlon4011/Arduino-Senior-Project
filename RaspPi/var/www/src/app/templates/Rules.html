@@ -1,12 +1,12 @@
 ﻿<div class="panel-body">
     <form class="form-horizontal" data-ng-submit="submitCtrlForm(CtrlForm.$valid)" id="CtrlForm" name="CtrlForm">
         <div class="form-group required col-sm-12" data-ng-class="{ 'has-error' : CtrlForm.desiredLowTemp.$invalid && !CtrlForm.desiredLowTemp.$pristine }">
-            <label class=" control-label col-sm-3" for="desiredLowTemp">Desired Lowest Temperature:</label>
+            <label class=" control-label col-sm-3" for="desiredLowTemp">Desired AC Temperature:</label>
             <input class="form-control RuleForm col-sm-2" type="number" data-ng-model="CtrlFormData.cool" data-ng-disabled="formEnable" placeholder="Enter lowest desired temperature" name="desiredLowTemp" required />
             <label class="control-label">{{degree}}</label>
         </div>
         <div class="form-group required col-sm-12" data-ng-class="{ 'has-error' : CtrlForm.desiredHighTemp.$invalid && !CtrlForm.desiredHighTemp.$pristine }">
-            <label class=" control-label col-sm-3" for="desiredHighTemp">Desired Highest Temperature:</label>
+            <label class=" control-label col-sm-3" for="desiredHighTemp">Desired Heater Temperature:</label>
             <input class="form-control RuleForm col-sm-2" type="number" data-ng-model="CtrlFormData.heat" data-ng-disabled="formEnable" placeholder="Enter highest desired temperature" name="desiredHighTemp" required />
             <label>{{degree}}</label>
         </div>
