@@ -56,6 +56,27 @@ if(isset($_GET['type'])) {
 				wrongCall();
 			}
 		break;
+		case 'addSurface':
+			if(isset($_GET['loc']) && isset($_GET['type'])) {
+				addSurface($link,$_GET['loc'],$_GET['type']);
+			} else {
+				wrongCall();
+			}
+		break;
+		case 'editNode':
+			if(isset($_GET['nid']) && isset($_GET['enabled']) && isset($_GET['loc'])) {
+				editNode($link,$_GET);
+			} else {
+				wrongCall();
+			}
+		break;
+		case 'removeNode':
+			if(isset($_GET['nid'])) {
+				removeNode($link,$_GET['nid']);
+			} else {
+				wrongCall();
+			}
+		break;
 		case 'test':
 			wrongCall();
 		break;
@@ -72,6 +93,26 @@ function wrongCall() {
 	exit;
 }
 
+function removeNode($link,$nid) {
+	$stmt = "DELETE FROM Nodes WHERE NodeID='$nid';";
+	mysql_to_mysqli($stmt, $link);
+	exit;
+}
+
+function editNode($link,$params) {
+	$stmt = "DELETE FROM ctrl_surf WHERE loc='".$params['loc']."';";
+	mysql_to_mysqli($stmt, $link);
+	$stmt = "UPDATE Nodes SET Loc='".$params['loc']."', enabled='".$params['enabled']."' WHERE NodeID='".$params['nid']."';";
+	mysql_to_mysqli($stmt, $link);
+	exit;
+}
+
+function addSurface($link,$loc,$type) {
+	$stmt = "INSERT INTO ctrl_surf (Type, Loc, State) VALUES ('$type', '$loc', 'off');";
+	mysql_to_mysqli($stmt, $link);
+	exit;
+}
+
 function removeSurface($link,$pid) {
 	$stmt = "DELETE FROM ctrl_surf WHERE PID='$pid';";
 	mysql_to_mysqli($stmt, $link);
@@ -82,7 +123,12 @@ function getSurface($link) {
 	$stmt="SELECT * FROM Nodes;";
 	$result = "[";
 	foreach(mysql_to_mysqli($stmt, $link) as $row) {
-		$result .= "{\"nodeID\":\"".$row['NodeID']."\",\"nodeLocation\":\"".$row['Loc']."\",\"ctrlSurface\"[";
+		if($row['enabled'] == 1) {
+			$bool = "true";
+		} else {
+			$bool = "false";
+		}
+		$result .= "{\"nodeID\":\"".$row['NodeID']."\",\"enabled\":\"".$bool."\",\"nodeLocation\":\"".$row['Loc']."\",\"ctrlSurface\"[";
 		$stmt1="SELECT * FROM homer.ctrl_surf where Loc='".$row['Loc']."';";
 		foreach(mysql_to_mysqli($stmt1, $link) as $row1) {
 			//echo $row1['Data'];
