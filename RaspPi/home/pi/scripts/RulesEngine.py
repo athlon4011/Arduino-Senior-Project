@@ -18,6 +18,7 @@ def check_vs_Rules(nodedict):
 		#check to see if the Rule needs to run once or more than once
 		if 'nodeall' in str_rule and not 'nodeany' in str_rule or  'nodeexact' in str_rule:
 			ifcondition = ifcondition_Creation("",conditions,nodedict,None)
+			print(eval(ifcondition))
 			print(ifcondition)
 			if eval(ifcondition) == True:
 				resultcondition_Creation(results,nodedict,None)
@@ -49,7 +50,7 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 					sum = 0.0
 					for anode in nodedict:
 						anode = Functions.convert_inst_to_dict(anode)
-						sum += float(anode[leftvar])							
+						sum += float(anode[leftvar])			
 					ifcondition = ifcondition + " " + str(sum/(len(nodedict)*1.0))  + " " + operand
 				elif modifier == 'sum':
 					sum = 0.0
@@ -91,7 +92,8 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 
 #Retrieving and executing all results
 def resultcondition_Creation(results,nodedict,node):
-	for idx, each in enumerate(results):				
+	for idx, each in enumerate(results):		
+			dataString = '';
 			sound = results[idx]['sound']
 			lednodetype = results[idx]['lednodetype']
 			ledcolor = results[idx]['ledcolor']
@@ -102,13 +104,18 @@ def resultcondition_Creation(results,nodedict,node):
 			
 			if sound == 'na':
 				sound = 0
+				dataString = dataString + str(sound)
 			else:
 				sound = 1
+				dataString = dataString + str(sound)
 			
 			if ledcolor != 'na':
 				#(sound,red,green,blue,loops(1-9),delay(1-9))
 				red,green,blue = dBComm.get_Color_Codes(ledcolor)
-				data = str(sound) + ',' + str(red) + ',' + str(green) + ',' + str(blue) + ',' + str(4) + ',' + str(3)
+				dataString= dataString +  ',' +  str(red) + ',' + str(green) + ',' + str(blue) + ',' + str(4) + ',' + str(3)
+			else:
+				red,green,blue = dBComm.get_Color_Codes('black')
+				dataString= dataString +  ',' +  str(red) + ',' + str(green) + ',' + str(blue) + ',' + str(0) + ',' + str(0)
 			
 			if ctrnodeloc != 'na':
 				#check for ctrl state being requested matches to dbState dont run this code
@@ -122,6 +129,7 @@ def resultcondition_Creation(results,nodedict,node):
 					elif ctrnodeloc == 'all':
 						#Updating all nodes Control Surfaces States
 						for Anode in nodedict:
+							print (Anode)
 							#Update the Control Surfaces State for the given node
 							dBComm.update_Control_Surface(Anode.id,ctrtype,ctrstate)
 							#Log Event
@@ -130,23 +138,29 @@ def resultcondition_Creation(results,nodedict,node):
 							
 					if lednodetype != 'nodeall':
 						if lednodetype == 'nodeany':
-							Node_Send_Command(node.ip,data,node.id)								
+							Node_Send_Command(node.ip,dataString,node.id)								
 					else:
 						for Anode in nodedict: 
-							Node_Send_Command(Anode.ip,data,Anode.id)
+							Node_Send_Command(Anode.ip,dataString,Anode.id)
 			else:
+				# print('HERE Else')
+				# print(dBComm.check_Control_Surface_State_NA(ctrtype,ctrstate))
+				# print(ctrstate)
+				# print(ctrtype)
+				# print(lednodetype)
 				if dBComm.check_Control_Surface_State_NA(ctrtype,ctrstate) != True:
 					dBComm.update_Control_Surface_HVAC(ctrtype,ctrstate)
 					if lednodetype != 'nodeall':
 						if lednodetype == 'nodeany':
 							Node_Send_Command(node.ip,data,node.id)	
 							log = 'Node ' + str(node.id) +': ' + log
-							dBComm.log_Event('Rule',log)							
+							dBComm.log_Event('Rule',log)
+						elif lednodetype == 'na':
+							dBComm.log_Event('Rule',log)
 					else:
 						for Anode in nodedict: 
-							Node_Send_Command(Anode.ip,data,Anode.id)
-							log = 'Node ' + str(Anode.id) +': ' + log
-							dBComm.log_Event('Rule',log)	
+							Node_Send_Command(Anode.ip,dataString,Anode.id)
+						dBComm.log_Event('Rule',log)	
 
 			
 				
