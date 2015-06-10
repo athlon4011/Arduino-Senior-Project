@@ -3,6 +3,7 @@
     var event = {};
     var rules = {};
     var settings = {};
+    var surface = {};
 
     //EVENT LOG
     this.eventLog = function () {
@@ -93,5 +94,62 @@
     this.getSettings = function () {
         return settings;
     }
+
+    this.surfaceCall = function () {
+        var deffered = $q.defer();
+        var request = $http({
+            url: 'src/backend/db.connect.php?type=getSurface',
+            method: 'GET',
+        })
+        request.success(function (data) {
+            surface = data;
+            deffered.resolve();
+        });
+        request.error(function (data, status) {
+            alert(data, status);
+        });
+        return deffered.promise;
+    }
+
+    this.getSurface = function () {
+        return surface;
+    }
+
+    this.removeSurface = function (pid) {
+        var request = $http({
+            url: 'src/backend/db.connect.php?type=removeSurface&pid=' + pid,
+            method: 'GET',
+        })
+        request.success(function (data) {
+        });
+    }
+
+    this.addSurface = function (loc, type) {
+        var request = $http({
+            url: 'src/backend/db.connect.php?type=addSurface&loc=' + loc + '&ctrlType=' + type,
+            method: 'GET',
+        })
+        request.success(function (data) {
+        });
+    }
+
+    this.editNode = function (nid, enabled, loc) {
+        var request = $http({
+            url: 'src/backend/db.connect.php?type=editNode&loc=' + loc + '&enabled=' + enabled + '&nid=' + nid,
+            method: 'GET',
+        })
+        request.success(function (data) {
+        });
+    }
+
+    this.removeNode = function (nid) {
+        var request = $http({
+            url: 'src/backend/db.connect.php?type=removeNode' + '&nid=' + nid,
+            method: 'GET',
+        })
+        request.success(function (data) {
+        });
+    }
+
 
 }]);

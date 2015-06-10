@@ -20,7 +20,7 @@ def mysql_fetch_assoc():
 	out = []  
 	try:
 		cursor = dataBase.cursor()
-		cursor.execute("Select NodeID,IP from Nodes")
+		cursor.execute("Select NodeID,IP from Nodes where enabled = 1 and type = 'data'")
 		rows = cursor.fetchall()	
 		for row in rows:    
 			data ={}

@@ -1,26 +1,30 @@
 ﻿<div class="panel-body col-md-12" id="sim" >
     <div class="col-md-5 panel" data-ng-repeat="item in items">
         <h4 class="col-md-12">Node: <small>{{item.nodeID}}</small></h4>
-        <h4 class="col-md-9">Location: <small>{{item.nodeLocation}}</small></h4>
-        <div class="col-md-3"><button type="button" class="btn btn-default " data-ng-click="editControlSurface">Edit Node</button></div>
+        <h4 data-ng-show="enabled" class="col-md-5">Location: <small>{{item.nodeLocation}}</small></h4>
+        <button type="button" class="btn btn-default" data-ng-show="enabled" style="float:right" data-ng-click="toggleEnable()">Edit Node</button>
+        <div data-ng-hide="enabled" class="EditNode">
+            <label data-ng-hide="enabled" for="Location">Location:</label>
+            <input type="text" data-ng-hide="enabled" id="Location" data-ng-model="item.nodeLocation" />
+            <label data-ng-hide="enabled" for="NodeEnable">Node Enable:</label>
+            <input type="checkbox" id="NodeEnable" data-ng-model="item.enabled" data-ng-hide="enabled" />
+        </div>
         <br />
 
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Control Surface</th>
-                        <th>Location</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody data-ng-repeat="ctrl in item.ctrlSurface">
-                    <tr>
-                        <td>{{ctrl.type}}</td>
-                        <td>{{ctrl.Location}}</td>
-                        <td>{{ctrl.Status}}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Control Surface</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody data-ng-repeat="ctrl in item.ctrlSurface">
+                <tr>
+                    <td>{{ctrl.type}}</td>
+                    <td>{{ctrl.Status}}</td>
+                </tr>
+            </tbody>
+        </table>
         <button type="button" class="btn btn-default" data-ng-click="open()">Add Control Surface</button>
     </div>
 </div>
@@ -34,19 +38,10 @@
     </a>
     <ul class="dropdown-menu" dropdown-menu>
         <li>
-            <a ng-click="action1()">Action1</a>
+            <a ng-click="action1()">Light</a>
         </li>
         <li>
-            <a ng-click="action2()">Action2</a>
-        </li>
-        <li>
-            <a ng-click="action3()">Action3</a>
-        </li>
-        <li>
-            <a ng-click="action4()">Action4</a>
-        </li>
-        <li>
-            <a ng-click="action5()">Action5</a>
+            <a ng-click="action2()">Fan</a>
         </li>
     </ul>
 </span>
