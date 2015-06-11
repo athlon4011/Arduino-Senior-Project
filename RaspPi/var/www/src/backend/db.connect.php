@@ -100,7 +100,9 @@ function removeNode($link,$nid) {
 }
 
 function editNode($link,$params) {
-	$stmt = "DELETE FROM ctrl_surf WHERE loc='".$params['loc']."';";
+	$stmt = "SELECT * FROM homer.Nodes where NodeID='".$params['nid']."';";
+	$result = mysqli_fetch_row(mysql_to_mysqli($stmt, $link));
+	$stmt = "UPDATE ctrl_surf SET Loc='".$params['loc']."' WHERE Loc='".$result[3]."';";
 	mysql_to_mysqli($stmt, $link);
 	$stmt = "UPDATE Nodes SET Loc='".$params['loc']."', enabled='".$params['enabled']."' WHERE NodeID='".$params['nid']."';";
 	mysql_to_mysqli($stmt, $link);
