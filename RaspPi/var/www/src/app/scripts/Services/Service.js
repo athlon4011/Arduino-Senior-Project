@@ -105,9 +105,6 @@
             surface = data;
             deffered.resolve();
         });
-        request.error(function (data, status) {
-            alert(data, status);
-        });
         return deffered.promise;
     }
 
@@ -116,30 +113,39 @@
     }
 
     this.removeSurface = function (pid) {
+        var deffered = $q.defer();
         var request = $http({
             url: 'src/backend/db.connect.php?type=removeSurface&pid=' + pid,
             method: 'GET',
         })
         request.success(function (data) {
+            deffered.resolve();
         });
+        return deffered.promise;
     }
 
     this.addSurface = function (loc, type) {
+        var deffered = $q.defer();
         var request = $http({
             url: 'src/backend/db.connect.php?type=addSurface&loc=' + loc + '&ctrlType=' + type,
             method: 'GET',
         })
         request.success(function (data) {
+            deffered.resolve();
         });
+        return deffered.promise;
     }
 
     this.editNode = function (nid, enabled, loc) {
+        var deffered = $q.defer();
         var request = $http({
             url: 'src/backend/db.connect.php?type=editNode&loc=' + loc + '&enabled=' + enabled + '&nid=' + nid,
             method: 'GET',
         })
         request.success(function (data) {
+            deffered.resolve();
         });
+        return deffered.promise;
     }
 
     this.removeNode = function (nid) {

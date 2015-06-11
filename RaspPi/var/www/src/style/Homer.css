@@ -41,6 +41,5 @@
 
 #sim .panel{
     margin: 40px;
-    overflow-y:hidden;
+    overflow-y:scroll;
 }
-

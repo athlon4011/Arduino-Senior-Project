@@ -1,16 +1,23 @@
 ﻿<div class="panel-body col-md-12" id="sim" >
-    <div class="col-md-5 panel" data-ng-repeat="item in items">
-        <h4 class="col-md-12">Node: <small>{{item.nodeID}}</small></h4>
-        <h4 data-ng-show="enabled" class="col-md-5">Location: <small>{{item.nodeLocation}}</small></h4>
-        <button type="button" class="btn btn-default" data-ng-show="enabled" style="float:right" data-ng-click="toggleEnable()">Edit Node</button>
-        <div data-ng-hide="enabled" class="EditNode">
-            <label data-ng-hide="enabled" for="Location">Location:</label>
-            <input type="text" data-ng-hide="enabled" id="Location" data-ng-model="item.nodeLocation" />
-            <label data-ng-hide="enabled" for="NodeEnable">Node Enable:</label>
-            <input type="checkbox" id="NodeEnable" data-ng-model="item.enabled" data-ng-hide="enabled" />
-        </div>
-        <br />
-
+    <div class="col-md-5 col-sm-12 panel"  data-ng-repeat="item in items" data-ng-init="pIdx = $index">
+        <h3 class="col-md-12">Node: <small>{{item.nodeID}}</small></h3>
+        <div data-ng-show="item.addHide">
+            <form data-ng-submit="submitNodeForm(pIdx)">
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" data-ng-disabled="item.hide" data-ng-model="item.nodeLocation" />
+                </div>
+                <div class="form-group">
+                    <label data-ng-disabled="item.hide" for="NodeEnable">Node Enable:</label>
+                    <input type="checkbox" id="NodeEnable" data-ng-model="item.enabled" data-ng-disabled="item.hide" />
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-default" data-ng-show="item.hide" data-ng-click="toggleEnable(pIdx)">Edit Node</button>
+                    <button type="submit" class="btn btn-default" data-ng-hide="item.hide">Submit</button>
+                    <button type="button" class="btn btn-default" data-ng-hide="item.hide" data-ng-click="toggleEnable(pIdx)">Cancel</button>
+                </div>
+            </form>
+        </div>           
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -18,30 +25,26 @@
                     <th>Status</th>
                 </tr>
             </thead>
-            <tbody data-ng-repeat="ctrl in item.ctrlSurface">
+            <tbody data-ng-repeat="ctrl in item.ctrlSurface" data-ng-init="cIdx = $index">
                 <tr>
                     <td>{{ctrl.type}}</td>
                     <td>{{ctrl.Status}}</td>
+                    <td><button type="button" class="btn btn-default" data-ng-click="remove(pIdx,cIdx)">Remove</button></td>
                 </tr>
             </tbody>
         </table>
-        <button type="button" class="btn btn-default" data-ng-click="open()">Add Control Surface</button>
+        <br data-ng-hide="item.addHide" />
+        <form data-ng-submit="add(pIdx)">
+            <div data-ng-hide="item.addHide" class="form-group">
+                <select class="form-control" data-ng-model="select[pIdx]" data-ng-options="ctrlSurface.label for ctrlSurface in ctrlSurfaces">
+                    <option value=''>- Please Choose a Control Surface -</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-default" style="float: left; bottom:0;  margin-bottom: 0;" data-ng-show="item.addHide" data-ng-click="toggleAddEnable(pIdx)">+ Add Control Surface</button>
+                <button type="submit" class="btn btn-default" style="float: left;  margin-bottom: 0;" data-ng-hide="item.addHide">Add</button>
+                <button type="button" class="btn btn-default" style="float:left;  margin-bottom:0;" data-ng-hide="item.addHide" data-ng-click="toggleAddEnable(pIdx)">Cancel</button>
+            </div>
+        </form>
     </div>
 </div>
-
-
-
-
-<span class="dropdown" dropdown>
-    <a href="" class="dropdown-toggle" dropdown-toggle>
-        Click
-    </a>
-    <ul class="dropdown-menu" dropdown-menu>
-        <li>
-            <a ng-click="action1()">Light</a>
-        </li>
-        <li>
-            <a ng-click="action2()">Fan</a>
-        </li>
-    </ul>
-</span>
