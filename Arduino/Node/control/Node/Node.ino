@@ -9,6 +9,13 @@ IPAddress ip(192, 168, 1, 177);
 IPAddress server(192, 168, 1, 39);
 unsigned int localPort = 8888;      // local port to listen on
 
+// An EthernetUDP instance to let us send and receive packets over UDP
+EthernetUDP Udp;
+
+// buffers for receiving and sending data
+char packetBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet,
+char  ReplyBuffer[] = "acknowledged";       // a string to send back
+
 // buffers for receiving and sending data
 void setup() {
   // start the Ethernet and UDP:
