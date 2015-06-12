@@ -44,6 +44,7 @@ void receivePacket() {
       //dataString += intTemp(); // Load internal temperature into data string
       dataString += getMotion();
       dataString += getLux();
+      dataString += getSmoke();
       char message[dataString.length()]; 
       dataString.toCharArray(message,dataString.length()); // convert string to char array
       sendPacket(message,Udp.remotePort());
