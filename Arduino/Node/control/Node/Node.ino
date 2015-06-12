@@ -7,11 +7,6 @@ byte mac[] = {
   0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
 IPAddress ip(192, 168, 1, 177);
 IPAddress server(192, 168, 1, 39);
-
-byte mac[] = {  
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192, 168, 1, 177);     // Arduino IP address
-IPAddress server(192, 168, 1, 39);  // Server IP address
 unsigned int localPort = 8888;      // local port to listen on
 
 // buffers for receiving and sending data
