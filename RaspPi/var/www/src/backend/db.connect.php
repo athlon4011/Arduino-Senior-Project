@@ -131,6 +131,12 @@ function getSurface($link) {
 			$bool = "false";
 		}
 		$result .= "{\"nodeID\":\"".$row['NodeID']."\",\"enabled\":".$bool.",\"nodeLocation\":\"".$row['Loc']."\",\"ctrlSurface\":[";
+		
+		$stmt1="SELECT * FROM homer.ctrl_surf where Loc='na';";
+		foreach(mysql_to_mysqli($stmt1, $link) as $row1) {
+			//echo $row1['Data'];
+			$result .= "{\"pid\": \"".$row1['PID']."\",\"type\": \"".$row1['Type']."\",\"Status\": \"".$row1['State']."\"},";
+		}
 		$stmt1="SELECT * FROM homer.ctrl_surf where Loc='".$row['Loc']."';";
 		foreach(mysql_to_mysqli($stmt1, $link) as $row1) {
 			//echo $row1['Data'];
