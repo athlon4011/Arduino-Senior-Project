@@ -17,8 +17,8 @@ while 1:
     if data is not None:
         reply = data[0]
         addr = data[1]
-        sock.sendto(str(reply),addr)
+        sock.sendto(str('booting'),addr)
         #Check if Node already exist in database
-        store_node_information(str(addr[0]))
+        store_node_information(str(addr[0]),str(reply))
 
 

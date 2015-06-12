@@ -1,11 +1,12 @@
 import MySQLdb
+import time
 
 #DataBase Connection
 dataBase = MySQLdb.connect(host = 'localhost',
                            user = 'root',
                            passwd = 'H0m3r',
-                           db = 'homer'		)				   
-
+                           db = 'homer'		)		
+						   
 						   
 #Store JSON into Database
 def dBJSON_Store(json_file,NodeID):
@@ -29,13 +30,28 @@ def mysql_fetch_assoc():
 				    tmp = cursor.description            
 				    data[tmp[i][0]] = row[i]
 			out.append(data)
-			print(out)
+		print(out)
 	except Exception as err:
 		print("Error in fetchassoc:")
 		print(err)
 	finally:
-	    return out	
+		return out;
 
+#Get Node Count
+def nodeCount():
+	try:
+		cursor = dataBase.cursor()
+		cursor.execute("Select count(*) from Nodes where Nodes.enabled = 1;")
+		dataBase.commit()
+		count = cursor.fetchone()[0]
+		cursor.close()
+		return count
+	except Exception as err:
+		print(err)
+		print("Error with getting Node Count.")
+		
+
+		
 #Creates a new Event based on type/message		
 def log_Event(type,message):
     cursor = dataBase.cursor()
@@ -74,13 +90,13 @@ def check_duplicate_data(NodeID,json_file):
 		print(err)
 
 #Checks Node Database if Node Exists, if Not Store
-def store_node_information(NodeIP):
+def store_node_information(NodeIP,MAC):
     try:
         cursor = dataBase.cursor()
-        cursor.execute("Select count(*) from Nodes where IP = %s;",(NodeIP))
+        cursor.execute("Select count(*) from Nodes where MAC= %s;",(MAC))
         count = cursor.fetchone()[0]
         if count == 0:
-			cursor.execute("Insert into Nodes(IP) values (%s)",(NodeIP))
+			cursor.execute("Insert into Nodes(IP,MAC,enabled,type,loc) values (%s, %s, 0, 'data','*New*')",(NodeIP,MAC))
 			dataBase.commit()
 			log_Event('System','New node added to the system.')
         #NODE RESTART LOG??? 
@@ -113,12 +129,17 @@ def update_Control_Surface(nodeid,ctrtype,ctrstate):
 def check_Control_Surface_State(nodeid,ctrtype,ctrstate):
 	try:
 		cursor = dataBase.cursor()
-		cursor.execute("Select State from ctrl_surf inner join Nodes where (Select Nodes.Loc from Nodes where NodeID = %s) = ctrl_surf.Loc and ctrl_surf.Type = %s",(nodeid,ctrtype))
-		dbState = ''.join(cursor.fetchone())
-		if dbState == ctrstate:
-			return True
+		cursor.execute("Select count(*) from ctrl_surf inner join Nodes where (Select Nodes.Loc from Nodes where NodeID = %s) = ctrl_surf.Loc and ctrl_surf.Type = %s",(nodeid,ctrtype))
+		count = cursor.fetchone()[0]
+		if count > 0:
+			cursor.execute("Select State from ctrl_surf inner join Nodes where (Select Nodes.Loc from Nodes where NodeID = %s) = ctrl_surf.Loc and ctrl_surf.Type = %s",(nodeid,ctrtype))
+			dbState = ''.join(cursor.fetchone())
+			if dbState == ctrstate:
+				return True
+			else:
+				return False
 		else:
-			return False
+			return True
 	except Exception as err:
 		print("Error updating control surfaces")
 		print(err)
@@ -126,12 +147,17 @@ def check_Control_Surface_State(nodeid,ctrtype,ctrstate):
 def check_Control_Surface_State_NA(ctrtype,ctrstate):
 	try:
 		cursor = dataBase.cursor()
-		cursor.execute("Select State from ctrl_surf where ctrl_surf.Type = %s",(ctrtype))
-		dbState = ''.join(cursor.fetchone())
-		if dbState == ctrstate:
-			return True
+		cursor.execute("Select count(*) from ctrl_surf where ctrl_surf.Type = %s",(ctrtype))
+		count = cursor.fetchone()[0]
+		if count > 0:
+			cursor.execute("Select State from ctrl_surf where ctrl_surf.Type = %s",(ctrtype))
+			dbState = ''.join(cursor.fetchone())
+			if dbState == ctrstate:
+				return True
+			else:
+				return False
 		else:
-			return False
+			return True
 	except Exception as err:
 		print("Error updating control surfaces")
 		print(err)

@@ -1,4 +1,4 @@
-﻿app.controller('SimHouseController', ['$scope', 'Service', function ($scope, Service) {
+﻿app.controller('ControlSurfaceController', ['$scope', 'Service', function ($scope, Service) {
 
     $scope.select = {};
 
@@ -93,6 +93,12 @@
             label: "Fan",
         }
     ]
+
+    //if (confirm("Press a button!") == true) {
+    //    x = "You pressed OK!";
+    //} else {
+    //    x = "You pressed Cancel!";
+    //}
 
 
     //$scope.items = [

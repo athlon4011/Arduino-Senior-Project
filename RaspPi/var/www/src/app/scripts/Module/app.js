@@ -14,10 +14,10 @@ app.config(function ($routeProvider) {
                 controller: 'RulesController'
             }
         )
-         .when('/SimHouse',
+         .when('/CtrlSurface',
             {
-                templateUrl: 'src/app/templates/SimHouse.html',
-                controller: 'SimHouseController'
+                templateUrl: 'src/app/templates/CtrlSurface.html',
+                controller: 'ControlSurfaceController'
             }
         )
         .otherwise({
