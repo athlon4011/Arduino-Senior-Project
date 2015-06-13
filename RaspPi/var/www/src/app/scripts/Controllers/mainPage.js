@@ -2,7 +2,7 @@
     $scope.Toggle = true;
 
     Service.getNodeData().then(function () {
-        $scope.Nodes = Service.retreiveNodeData();
+        $scope.Nodes = Service.retrieveNodeData();
     });
     //To grab EventLog JSON
     Service.eventLog().then(function () {
@@ -16,7 +16,12 @@
         });
         //To grab NodeLog JSON
         Service.getNodeData().then(function () {
-            $scope.Nodes = Service.retreiveNodeData();
+            var object = Service.retrieveNodeData();
+            for (var i = 0; i < $scope.Nodes.length; i++) {
+                for (var k = 0; k < $scope.Nodes[i].node.length; k++) {
+                    $scope.Nodes[i].node[k] = object[i].node[k];
+                }
+            }
         });
     }, 3000);
 

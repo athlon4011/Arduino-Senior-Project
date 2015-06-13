@@ -34,6 +34,8 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 	#Convert type instance to dictionary
 	if node != None:
 		node = Functions.convert_inst_to_dict(node)
+		# node = json.loads(node)
+		# print(node['id'])
 	#check to see if the Rule needs to run once or more than once2
 	for idx, each in enumerate(conditions):				
 			modifier = conditions[idx]['modifier']
@@ -44,6 +46,7 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 			rightvar = conditions[idx]['rightvar']
 			joiner = conditions[idx]['joiner']
 			#LEFT SIDE OF OPERAND
+							
 			#NODE ALL TYPE
 			if leftype == 'nodeall':
 				if modifier == 'avg':
@@ -69,7 +72,10 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 					# continue
 			#NODE ANY TYPE
 			elif leftype == 'nodeany':
-				ifcondition = ifcondition + " " + node[leftvar] + " " + operand
+				if('overtime' in conditions[idx]):
+					ifcondition = ifcondition + " 0 " + operand
+				else:
+					ifcondition = ifcondition + " " + node[leftvar] + " " + operand
 			#SERVER TYPE
 			elif leftype == 'server':
 				if leftvar == 'current_time':
@@ -81,8 +87,16 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 					current_time = hours_to_seconds + minutes_to_seconds
 					ifcondition =  ifcondition + " " + str(current_time) + " " + operand
 			#RIGHT SIDE OF OPERAND
-			if rightype == 'numbervalue':
-					ifcondition = ifcondition + " "  + rightvar
+			if rightype == 'numbervalue':						
+				if('overtime' in conditions[idx]):
+					current_time = int(time.time())
+					settings = Functions.convert_String_toJSON(dBComm.getSettings())
+					delay = settings[conditions[idx]['overtime']]		
+					newTime = current_time - int(delay)
+					delayedDateTime =  time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(newTime))			
+					rightvar = dBComm.checkConsistency(node['id'],delayedDateTime,leftvar,rightvar)
+					print(rightvar)
+				ifcondition = ifcondition + " "  + str(rightvar)
 			elif rightype == 'system':
 				settings = Functions.convert_String_toJSON(dBComm.getSettings())
 				ifcondition = ifcondition + " " + settings[rightvar]

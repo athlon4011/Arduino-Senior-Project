@@ -1,6 +1,20 @@
-﻿app.controller('ControlSurfaceController', ['$scope', 'Service', function ($scope, Service) {
+﻿app.controller('ControlSurfaceController', ['$scope', 'Service','$interval', function ($scope, Service, $interval) {
 
     $scope.select = {};
+
+    //Add Hide Elements
+    $scope.addElements = function () {
+        for (var i = 0; i < $scope.items.length; i++) {
+            $scope.items[i]['hide'] = true;
+            $scope.items[i]['addHide'] = true;
+        }
+    }
+
+    Service.surfaceCall().then(function () {
+        $scope.items = Service.getSurface();
+        $scope.addElements();
+    });
+
 
     //Toggle hiding of edit Node form
     $scope.toggleEnable = function (idx) {
@@ -39,19 +53,18 @@
 
     }
 
-    //Getting CTRL surface information
-    Service.surfaceCall().then(function () {
-        $scope.items = Service.getSurface();
-        $scope.addElements();
-    });
-
-    //Add Hide Elements
-    $scope.addElements = function () {
-        for (var i = 0; i < $scope.items.length; i++) {
-            $scope.items[i]['hide'] = true;
-            $scope.items[i]['addHide'] = true;
-        }
-    }
+    //Continously Get Surface information every 3 seconds if edit or add control surface is not true;
+    $interval(function () {
+            //Getting CTRL surface information
+        Service.surfaceCall().then(function () {
+            var object = Service.getSurface();
+            for (var i = 0; i < $scope.items.length; i++) {
+                for (var k = 0; k < $scope.items[i].ctrlSurface.length; k++) {
+                    $scope.items[i].ctrlSurface[k] = object[i].ctrlSurface[k];
+                }
+            }
+        });
+    }, 3000)
 
     //Add Ctrl Surface
     $scope.add = function (idx) {

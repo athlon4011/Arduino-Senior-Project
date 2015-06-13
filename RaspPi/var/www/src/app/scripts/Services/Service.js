@@ -37,7 +37,7 @@
         return deffered.promise;
     }
 
-    this.retreiveNodeData = function () {
+    this.retrieveNodeData = function () {
         return nodeData;
     }
 

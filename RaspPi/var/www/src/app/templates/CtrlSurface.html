@@ -29,7 +29,7 @@
                 <tr>
                     <td>{{ctrl.type}}</td>
                     <td>{{ctrl.Status}}</td>
-                    <td><button type="button" class="btn btn-default" data-ng-click="remove(pIdx,cIdx)">Remove</button></td>
+                    <td><button type="button" class="btn btn-default" ng-show="!$first" data-ng-click="remove(pIdx,cIdx)">Remove</button></td>
                 </tr>
             </tbody>
         </table>
