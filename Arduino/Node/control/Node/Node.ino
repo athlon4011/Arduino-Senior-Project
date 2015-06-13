@@ -4,10 +4,11 @@
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 byte mac[] = {  
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192, 168, 1, 177);
-IPAddress server(192, 168, 1, 39);
+  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xAD };
+IPAddress ip(192, 168, 1, 179);
+IPAddress server(255, 255, 255, 255);  // Server IP address
 unsigned int localPort = 8888;      // local port to listen on
+boolean boot = true;
 
 // An EthernetUDP instance to let us send and receive packets over UDP
 EthernetUDP Udp;
@@ -15,33 +16,35 @@ EthernetUDP Udp;
 // buffers for receiving and sending data
 char packetBuffer[UDP_TX_PACKET_MAX_SIZE]; //buffer to hold incoming packet,
 char  ReplyBuffer[] = "acknowledged";       // a string to send back
-
+char  bootBuffer[] = "DE:AD:BE:EF:FE:ED";       // a string to send back
+int light = 8;
+int fan = 9;
 // buffers for receiving and sending data
 void setup() {
   // start the Ethernet and UDP:
-  Ethernet.begin(mac,ip);
+  Ethernet.begin(mac);
   Udp.begin(localPort);
-
   Serial.begin(9600);
+  pinMode(light, OUTPUT);  
+  pinMode(fan, OUTPUT);  
+  while(boot) {
+    sendPacket(bootBuffer);
+    if(receivePacket() == "booting") {
+      boot = false;
+      server = Udp.remoteIP();
+    }
+  }
 }
 
 void loop() {
-  // if there's data available, read a packet
-  int packetSize = Udp.parsePacket();
-  //int packetSize = Udp.parsePacket();
- 
-    // send a reply, to the IP address and port that sent us the packet we received
-    Udp.beginPacket(server, localPort);
-    Udp.write(ReplyBuffer);
-    Udp.endPacket();
-    Serial.print("test: ");
-    Serial.println(server);
-  // send a reply, to the IP address and port that sent us the packet we received
-  receivePacket();
   sendPacket("Hello");
-  //Serial.print("test: ");
-  //Serial.println(server);
-  
+  digitalWrite(light, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(1000);               // wait for a second
+  digitalWrite(light, LOW);    // turn the LED off by making the voltage LOW
+  delay(1000);
+  digitalWrite(fan, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(1000);               // wait for a second
+  digitalWrite(fan, LOW);    // turn the LED off by making the voltage LOW
   delay(1000);
 }
 
@@ -51,7 +54,7 @@ void sendPacket(char message[]) {
   Udp.endPacket();
 }
 
-void receivePacket() {
+String receivePacket() {
   int packetSize = Udp.parsePacket();
   if(packetSize)
   {
@@ -72,7 +75,10 @@ void receivePacket() {
 
     // read the packet into packetBufffer
     Udp.read(packetBuffer,UDP_TX_PACKET_MAX_SIZE);
+    Serial.println("packetsize:");
+    Serial.print(packetSize);
     Serial.println("Contents:");
     Serial.println(packetBuffer);
+    return String(packetBuffer);
   }
 }
