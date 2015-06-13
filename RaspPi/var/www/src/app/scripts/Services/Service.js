@@ -69,9 +69,9 @@
         });
     }
     //Set Settings
-    this.setSettings = function (cool, heat, start, end) {
+    this.setSettings = function (cool, heat, start, end, timeout) {
         var request = $http({
-            url: 'src/backend/db.connect.php?type=settings&cool=' + cool + '&heat=' + heat + '&start=' + start + '&end=' + end,
+            url: 'src/backend/db.connect.php?type=settings&cool=' + cool + '&heat=' + heat + '&start=' + start + '&end=' + end + '&timeout=' + timeout,
             method: 'GET',
         })
         request.success(function (data) {

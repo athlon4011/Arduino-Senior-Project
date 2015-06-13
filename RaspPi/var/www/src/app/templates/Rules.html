@@ -18,6 +18,9 @@
             <label class=" control-label col-sm-3" for="restrictedEndTime">Restricted End Time:</label>
             <input class="form-control RuleForm col-sm-2" data-ng-model="end" type="time" data-ng-disabled="formEnable" id="restrictedEndTime" name="restrictedEndTime" required />
         </div>
+        <div class="form-group required col-sm-12" data-ng-class="{ 'has-error' : CtrlForm.timeout.$invalid && !CtrlForm.timeout.$pristine }">
+            <label class="control-label col-sm-3" for="timeout">Time Lapse(s)</label>
+            <input class="form-control RuleForm col-sm-2" data-ng-model="CtrlFormData.timeout" type="number" ng-minlength="1" ng-maxlength="2" min="1" max="60" data-ng-disabled="formEnable" placeholder="Enter time delay in seconds (1-60)" name="timeout" required></div>
         <div class="form-group col-sm-12">
             <button type="button" class="btn btn-default" data-ng-click="EditButton()" data-ng-show="formEnable">Edit</button>
             <button type="submit" class="btn btn-default" data-ng-show="!formEnable">Submit</button>

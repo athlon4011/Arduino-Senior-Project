@@ -202,9 +202,7 @@ def getSettings():
 def checkConsistency(nodeID,delay,leftvar,rightvar):
 	try:
 		cursor = dataBase.cursor()
-		string = "Select count(*) from Sensor_Log where NodeID=%d AND DATE Between %s and NOW() AND Data NOT LIKE  '% %s : %s ' ".format(nodeID,delay,leftvar,rightvar)
-		print(string)
-		cursor.execute("""SELECT count(*) FROM homer.Sensor_Log where NodeID=%s AND Date BETWEEN %s AND NOW() AND Data NOT  LIKE   "%s : %s" """,(str(nodeID),delay,leftvar,rightvar))
+		cursor.execute("SELECT count(*) FROM homer.Sensor_Log where NodeID=\'" + str(nodeID) + "\' and Date BETWEEN \'" + delay + "\' AND NOW() and Data NOT LIKE \'%\"" + leftvar + "\": \"" + rightvar + "\"%\';")
 		data = cursor.fetchone()[0]
 		return data
 	except Exception as err:

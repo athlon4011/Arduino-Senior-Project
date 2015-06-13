@@ -15,6 +15,7 @@
         heat: '',
         start: '',
         end: '',
+        timeout: '',
     }
 
 
@@ -25,6 +26,7 @@
         $scope.CtrlFormData.heat = parseInt($scope.Settings.heat);
         document.getElementById('restrictedStartTime').value = TimeCounter($scope.Settings.start);
         document.getElementById('restrictedEndTime').value = TimeCounter($scope.Settings.end);
+        $scope.CtrlFormData.timeout = parseInt($scope.Settings.timeout);
 
     });
     //Edit Button
@@ -83,7 +85,7 @@
 
 
 
-    //Will send submitted Desired Temp information to SQL Server
+    //Will send submitted Settings to to SQL Server
     $scope.submitCtrlForm = function () {
         if ($scope.CtrlForm.$valid) {
             //Convert Object to String
@@ -91,8 +93,9 @@
             heat = $scope.CtrlFormData.heat.toString();
             start = $scope.CtrlFormData.start.toString();
             endtime = $scope.CtrlFormData.end.toString();
+            timeout = $scope.CtrlFormData.timeout.toString();
             //Send variables to php
-            Service.setSettings(cool, heat, start, endtime);
+            Service.setSettings(cool, heat, start, endtime,timeout);
             $scope.formEnable = true;
         }
     }

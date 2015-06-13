@@ -18,14 +18,15 @@ def check_vs_Rules(nodedict):
 		#check to see if the Rule needs to run once or more than once
 		if 'nodeall' in str_rule and not 'nodeany' in str_rule or  'nodeexact' in str_rule:
 			ifcondition = ifcondition_Creation("",conditions,nodedict,None)
-			print(eval(ifcondition))
-			print(ifcondition)
+			# print(eval(ifcondition))
+			# print(ifcondition)
 			if eval(ifcondition) == True:
 				resultcondition_Creation(results,nodedict,None)
 		else:
 			for node in nodedict:
 				ifcondition = ifcondition_Creation("",conditions,nodedict,node)
-				print(ifcondition)
+				# print(eval(ifcondition))
+				# print(ifcondition)
 				if eval(ifcondition) == True:
 					resultcondition_Creation(results,nodedict,node)
 
@@ -45,8 +46,13 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 			rightype = conditions[idx]['rightype']
 			rightvar = conditions[idx]['rightvar']
 			joiner = conditions[idx]['joiner']
-			#LEFT SIDE OF OPERAND
-							
+			
+			if ('group' in conditions[idx]):
+				if conditions[idx]['group'] == 'a':
+					ifcondition = ifcondition + '('
+				
+			
+			#LEFT SIDE OF OPERAND						
 			#NODE ALL TYPE
 			if leftype == 'nodeall':
 				if modifier == 'avg':
@@ -95,13 +101,17 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 					newTime = current_time - int(delay)
 					delayedDateTime =  time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(newTime))			
 					rightvar = dBComm.checkConsistency(node['id'],delayedDateTime,leftvar,rightvar)
-					print(rightvar)
 				ifcondition = ifcondition + " "  + str(rightvar)
 			elif rightype == 'system':
 				settings = Functions.convert_String_toJSON(dBComm.getSettings())
-				ifcondition = ifcondition + " " + settings[rightvar]
+				ifcondition = ifcondition + " " + settings[rightvar]			
+			if 'group' in conditions[idx]:
+				if conditions[idx]['group'] == 'b':
+					ifcondition = ifcondition + ')'
 			if joiner != 'na':
 				ifcondition = ifcondition + " " + joiner
+				
+				
 	return ifcondition
 
 #Retrieving and executing all results
