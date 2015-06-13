@@ -16,7 +16,7 @@ int noteDurations[] = {
 // buffers for receiving and sending data
 char  bootBuffer[] = "DE:AD:BE:EF:FE:ED";       // a string to send back
 byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192, 168, 1, 177);     // Arduino IP address
+IPAddress ip(192, 168, 1, 179);     // Arduino IP address
 IPAddress server(255, 255, 255, 255);  // Server IP address
 unsigned int localPort = 8888;      // local port to listen on
 

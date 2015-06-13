@@ -37,7 +37,16 @@ void setup() {
 }
 
 void loop() {
-  sendPacket("Hello");
+  String msg = receivePacket();
+  if(msg.startsWith("send")) {
+      IPAddress remote = Udp.remoteIP();
+      if(server == remote) {
+        
+      }
+    }
+    
+    
+  /*sendPacket("Hello");
   digitalWrite(light, HIGH);   // turn the LED on (HIGH is the voltage level)
   delay(1000);               // wait for a second
   digitalWrite(light, LOW);    // turn the LED off by making the voltage LOW
@@ -45,40 +54,9 @@ void loop() {
   digitalWrite(fan, HIGH);   // turn the LED on (HIGH is the voltage level)
   delay(1000);               // wait for a second
   digitalWrite(fan, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);
+  delay(1000);*/
 }
 
-void sendPacket(char message[]) {
-  Udp.beginPacket(server, localPort);
-  Udp.write(message);
-  Udp.endPacket();
-}
 
-String receivePacket() {
-  int packetSize = Udp.parsePacket();
-  if(packetSize)
-  {
-    Serial.print("Received packet of size ");
-    Serial.println(packetSize);
-    Serial.print("From ");
-    IPAddress remote = Udp.remoteIP();
-    for (int i =0; i < 4; i++)
-    {
-      Serial.print(remote[i], DEC);
-      if (i < 3)
-      {
-        Serial.print(".");
-      }
-    }
-    Serial.print(", port ");
-    Serial.println(Udp.remotePort());
 
-    // read the packet into packetBufffer
-    Udp.read(packetBuffer,UDP_TX_PACKET_MAX_SIZE);
-    Serial.println("packetsize:");
-    Serial.print(packetSize);
-    Serial.println("Contents:");
-    Serial.println(packetBuffer);
-    return String(packetBuffer);
-  }
-}
+
