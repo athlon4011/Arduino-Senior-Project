@@ -173,19 +173,23 @@ def resultcondition_Creation(results,nodedict,node):
 				# print(ctrstate)
 				# print(ctrtype)
 				# print(lednodetype)
-				if dBComm.check_Control_Surface_State_NA(ctrtype,ctrstate) != True:
-					dBComm.update_Control_Surface_HVAC(ctrtype,ctrstate)
-					if lednodetype != 'nodeall':
-						if lednodetype == 'nodeany':
-							Node_Send_Command(node.ip,data,node.id)	
-							log = 'Node ' + str(node.id) +': ' + log
-							dBComm.log_Event('Rule',log)
-						elif lednodetype == 'na':
-							dBComm.log_Event('Rule',log)
-					else:
-						for Anode in nodedict: 
-							Node_Send_Command(Anode.ip,dataString,Anode.id)
-						dBComm.log_Event('Rule',log)	
-
+				if ctrtype != 'na':
+					if dBComm.check_Control_Surface_State_NA(ctrtype,ctrstate) != True:
+						dBComm.update_Control_Surface_HVAC(ctrtype,ctrstate)
+						if lednodetype != 'nodeall':
+							if lednodetype == 'nodeany':
+								Node_Send_Command(node.ip,data,node.id)	
+								log = 'Node ' + str(node.id) +': ' + log
+								dBComm.log_Event('Rule',log)
+							elif lednodetype == 'na':
+								dBComm.log_Event('Rule',log)
+						else:
+							for Anode in nodedict: 
+								Node_Send_Command(Anode.ip,dataString,Anode.id)
+							dBComm.log_Event('Rule',log)	
+				else:
+					for Anode in nodedict: 
+								Node_Send_Command(Anode.ip,dataString,Anode.id)
+							dBComm.log_Event('Rule',log)	
 			
 				
