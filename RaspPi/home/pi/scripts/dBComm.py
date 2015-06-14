@@ -99,6 +99,9 @@ def store_node_information(NodeIP,MAC):
 			cursor.execute("Insert into Nodes(IP,MAC,enabled,type,loc) values (%s, %s, 0, 'data','*New*')",(NodeIP,MAC))
 			dataBase.commit()
 			log_Event('System','New node added to the system.')
+		else:
+			cursor.execute("Update Nodes set  IP= %s where MAC= %s;".(NodeIP,MAC))
+			dataBase.commit()
         #NODE RESTART LOG??? 
         else:
             print("Already Have that Node")           
