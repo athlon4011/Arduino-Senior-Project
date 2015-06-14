@@ -2,8 +2,8 @@
 
     $scope.formEnable = true;
     $scope.degree = '\xB0' + 'F';
-    $scope.start = "00:00";
-    $scope.end = "00:00";
+    $scope.start = new Date();
+    $scope.end = new Date();
 
     Service.getRulesLog().then(function () {
         $scope.items = Service.getRules();
@@ -24,6 +24,8 @@
 
         $scope.CtrlFormData.cool = parseInt($scope.Settings.cool);
         $scope.CtrlFormData.heat = parseInt($scope.Settings.heat);
+        $scope.CtrlFormData.start = $scope.Settings.start;
+        $scope.CtrlFormData.end = $scope.Settings.end;
         document.getElementById('restrictedStartTime').value = TimeCounter($scope.Settings.start);
         document.getElementById('restrictedEndTime').value = TimeCounter($scope.Settings.end);
         $scope.CtrlFormData.timeout = parseInt($scope.Settings.timeout);
