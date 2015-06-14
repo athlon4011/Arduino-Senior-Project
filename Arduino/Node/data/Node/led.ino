@@ -13,7 +13,7 @@
 }*/
 
 void setLED(int red, int green, int blue, int loops, int interval) {
-  Serial.print("red: ");
+  /*Serial.print("red: ");
   Serial.println(red);
   Serial.print("green: ");
   Serial.println(green);
@@ -22,7 +22,7 @@ void setLED(int red, int green, int blue, int loops, int interval) {
   Serial.print("loops: ");
   Serial.println(loops);
   Serial.print("interval: ");
-  Serial.println(interval);
+  Serial.println(interval);*/
     byte on[] = {red,green,blue}; //the RGB (red, gren blue) value for a color to display  
     byte off[] = {0,0,0}; //the RGB (red, gren blue) value for a color to display  
     //setColor(leds, on);  

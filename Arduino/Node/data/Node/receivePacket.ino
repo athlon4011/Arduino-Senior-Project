@@ -4,7 +4,7 @@ void receivePacket() {
   {
     IPAddress remote = Udp.remoteIP();
     if(server == remote) {
-    if(debug) {
+    /*if(debug) {
       Serial.print("Received packet from ");
       
       for (int i =0; i < 4; i++)
@@ -19,16 +19,16 @@ void receivePacket() {
       Serial.print(Udp.remotePort());
       Serial.print(", size ");
       Serial.println(packetSize);
-    }
+    }*/
     // read the packet into packetBufffer
     char* msg = (char*)malloc(packetSize+1);
     int len = Udp.read(msg,packetSize+1);
-    msg[len]=0;
+    msg[len]=0;/*
     if(debug) {
       Serial.print("Contents: ");
       Serial.println(msg);
       //Serial.print('|');
-    }
+    }*/
     //String test = msg;
     //test.trim();
     //char compare[] = "hello";
@@ -53,20 +53,23 @@ void receivePacket() {
       test.remove(0,5);
       separateData(test);
       Udp.stop();
-        Serial.print("restart connection: ");
-    Serial.println (Udp.begin(localPort) ? "success" : "failed");
+       // Serial.print("restart connection: ");
+          Udp.begin(localPort);
+//    Serial.println (Udp.begin(localPort) ? "success" : "failed");
     } else {
       Udp.stop();
-        Serial.print("restart connection: ");
-    Serial.println (Udp.begin(localPort) ? "success" : "failed");
+      //  Serial.print("restart connection: ");
+          Udp.begin(localPort);
+//    Serial.println (Udp.begin(localPort) ? "success" : "failed");
     }
     //testString(msg, (packetSize-2));
     free(msg);
     } else {
-      Serial.println("Invalid Server!");
+     // Serial.println("Invalid Server!");
       Udp.stop();
-        Serial.print("restart connection: ");
-    Serial.println (Udp.begin(localPort) ? "success" : "failed");
+      //  Serial.print("restart connection: ");
+         Udp.begin(localPort);
+//    Serial.println (Udp.begin(localPort) ? "success" : "failed");
     }
   }
 }

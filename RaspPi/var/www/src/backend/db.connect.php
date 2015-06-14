@@ -132,7 +132,7 @@ function editSurface($link,$pid) {
 	} else {
 		$state = "off";
 	};
-	$stmt = "UPDATE ctrl_surf SET State='".$state."' WHERE PID='".%pid."';";
+	$stmt = "UPDATE ctrl_surf SET State='".$state."' WHERE PID='".$pid."';";
 	mysql_to_mysqli($stmt, $link);
 	exit;
 }
