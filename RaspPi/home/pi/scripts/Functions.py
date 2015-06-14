@@ -5,12 +5,13 @@ import os
 
 #Node Class
 class node:
-	def __init__(self,id,ip,motion, lux,temp):
+	def __init__(self,id,ip,motion, lux,temp,smoke):
 		self.motion = motion
 		self.lux = lux
 		self.temp = temp
 		self.id = id
 		self.ip = ip
+		self.smoke = smoke
 
 # Functions
 #Convert arduino String to JSON
@@ -35,7 +36,7 @@ def check_for_running():
 #Storing of Node Data into Array
 def tempNodeArray(NodeID,NodeIP,data):
 	data = json.loads(data)
-	nodeobj = node(NodeID,NodeIP,data["motion"],data["lux"],data["temp"])
+	nodeobj = node(NodeID,NodeIP,data["motion"],data["lux"],data["temp"],data["smoke"])
 	return nodeobj
 
 def convert_inst_to_dict(node):

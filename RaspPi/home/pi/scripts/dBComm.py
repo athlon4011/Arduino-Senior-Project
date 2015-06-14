@@ -92,15 +92,15 @@ def check_duplicate_data(NodeID,json_file):
 #Checks Node Database if Node Exists, if Not Store
 def store_node_information(NodeIP,MAC):
     try:
-        cursor = dataBase.cursor()
-        cursor.execute("Select count(*) from Nodes where MAC= %s;",(MAC))
-        count = cursor.fetchone()[0]
-        if count == 0:
+		cursor = dataBase.cursor()
+		cursor.execute("Select count(*) from Nodes where MAC= %s;",(MAC))
+		count = cursor.fetchone()[0]
+		if count == 0:
 			cursor.execute("Insert into Nodes(IP,MAC,enabled,type,loc) values (%s, %s, 0, 'data','*New*')",(NodeIP,MAC))
 			dataBase.commit()
 			log_Event('System','New node added to the system.')
 		else:
-			cursor.execute("Update Nodes set  IP= %s where MAC= %s;".(NodeIP,MAC))
+			cursor.execute("Update Nodes set  IP= %s where MAC= %s;",(NodeIP,MAC))
 			dataBase.commit()
 			print("Already Have that Node, Updated IP")        
 
