@@ -63,6 +63,13 @@ if(isset($_GET['type'])) {
 				wrongCall();
 			}
 		break;
+		case 'editSurface':
+			if(isset($_GET['pid'])) {
+				editSurface($link,$_GET['pid']);
+			} else {
+				wrongCall();
+			}
+		break;
 		case 'editNode':
 			if(isset($_GET['nid']) && isset($_GET['enabled']) && isset($_GET['loc'])) {
 				editNode($link,$_GET);
@@ -111,6 +118,21 @@ function editNode($link,$params) {
 
 function addSurface($link,$loc,$type) {
 	$stmt = "INSERT INTO ctrl_surf (Type, Loc, State) VALUES ('$type', '$loc', 'off');";
+	mysql_to_mysqli($stmt, $link);
+	exit;
+}
+
+function editSurface($link,$pid) {
+	$stmt="SELECT * FROM ctrl_surf where PID=$pid;";
+	$result = mysqli_fetch_row(mysql_to_mysqli($stmt, $link));
+	//print_r($result);
+	echo $result[3];
+	if($result[3] == "off") {
+		$state = "on";
+	} else {
+		$state = "off";
+	};
+	$stmt = "UPDATE ctrl_surf SET State='".$state."' WHERE PID='".%pid."';";
 	mysql_to_mysqli($stmt, $link);
 	exit;
 }
