@@ -189,7 +189,7 @@ def resultcondition_Creation(results,nodedict,node):
 							dBComm.log_Event('Rule',log)	
 				else:
 					for Anode in nodedict: 
-								Node_Send_Command(Anode.ip,dataString,Anode.id)
-							dBComm.log_Event('Rule',log)	
+						Node_Send_Command(Anode.ip,dataString,Anode.id)
+					dBComm.log_Event('Rule',log)	
 			
 				

@@ -24,9 +24,9 @@ char macstr[18];
 IPAddress server(255, 255, 255, 255);  // Server IP address
 unsigned int localPort = 8888;      // local port to listen on
 
-int temp_pin = 0;        // the analog pin for LM34 temp sensor - Cannot use pin 0 as it is used for something by DRobotics LCD shield
+int temp_pin = 0;        // the analog pin for LM34 temp sensor
 int motion_pin = 2;
-int alarm_pin = A2;    // select the input pin for the potentiometer
+int alarm_pin = A2;    // select the input pin for the alarm voltage divider
 int leds[] = {5, 3, 6}; 
 //float sensor_reading = 0.0;        // variable to store the value coming from the sensor
 float vref = 1.04;        // variable to store the voltage reference used (check for validity with a DMM)
