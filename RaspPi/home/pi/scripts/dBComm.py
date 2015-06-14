@@ -102,9 +102,8 @@ def store_node_information(NodeIP,MAC):
 		else:
 			cursor.execute("Update Nodes set  IP= %s where MAC= %s;".(NodeIP,MAC))
 			dataBase.commit()
-        #NODE RESTART LOG??? 
-        else:
-            print("Already Have that Node")           
+			print("Already Have that Node, Updated IP")        
+
     except Exception as err:
         print("Error checking Node Table")
         print(err)
