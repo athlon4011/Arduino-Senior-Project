@@ -14,14 +14,15 @@ int noteDurations[] = {
 // Enter a MAC address and IP address for your controller below.
 // The IP address will be dependent on your local network:
 // buffers for receiving and sending data
-char  bootBuffer[] = "DE:AD:BE:EF:FE:ED";       // a string to send back
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192, 168, 1, 179);     // Arduino IP address
+char  bootBuffer[] = "DE:AD:BE:EF:FE:EF";       // a string to send back
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEF };
+IPAddress ip(192, 168, 1, 178);     // Arduino IP address
 IPAddress server(255, 255, 255, 255);  // Server IP address
 unsigned int localPort = 8888;      // local port to listen on
 
 int temp_pin = 0;        // the analog pin for LM34 temp sensor - Cannot use pin 0 as it is used for something by DRobotics LCD shield
 int motion_pin = 2;
+int alarm_pin = A2;    // select the input pin for the potentiometer
 int leds[] = {5, 3, 6}; 
 float sensor_reading = 0.0;        // variable to store the value coming from the sensor
 float vref = 1.04;        // variable to store the voltage reference used (check for validity with a DMM)

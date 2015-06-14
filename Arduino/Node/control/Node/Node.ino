@@ -41,7 +41,9 @@ void loop() {
   if(msg.startsWith("send")) {
       IPAddress remote = Udp.remoteIP();
       if(server == remote) {
-        
+        String test = String(msg);
+        test.remove(0,5);
+        Serial.println(test);
       }
     }
     
