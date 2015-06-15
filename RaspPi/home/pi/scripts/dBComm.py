@@ -74,8 +74,8 @@ def get_Last_Log_Event():
 def check_duplicate_data(NodeID,json_file):
 
     try:
-        cursor = dataBase.cursor()
-        cursor.execute("Select count(*) from Sensor_Log")
+		cursor = dataBase.cursor()
+		cursor.execute("Select count(*) from Sensor_Log")
 		dataBase.commit()
         count =  cursor.fetchone()[0]
         if count == 0:
@@ -115,14 +115,14 @@ def store_node_information(NodeIP,MAC):
 
 def get_Rules():
     try:
-        cursor = dataBase.cursor()
-        cursor.execute("Select Data from Rules where enabled = 1")
+		cursor = dataBase.cursor()
+		cursor.execute("Select Data from Rules where enabled = 1")
 		dataBase.commit()
-        data = cursor.fetchall()
-        cursor.execute("Select Title from Rules where enabled = 1")
+		data = cursor.fetchall()
+		cursor.execute("Select Title from Rules where enabled = 1")
 		dataBase.commit()
-        title = cursor.fetchall()
-        return data,title
+		title = cursor.fetchall()
+		return data,title
     except Exception as err:
         print("Error checking Node Table")
         print(err)
