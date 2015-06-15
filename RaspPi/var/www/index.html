@@ -4,7 +4,7 @@
     <title>H.O.M.E.R</title>
     <!--Required Scripts-->
     <script src="src/scripts/angular.js"></script>
-    <script src="src/scripts/ui-bootstrap-0.13.0.js"></script>
+    <script src="src/scripts/ui-bootstrap-tpls-0.13.0.js"></script>
     <script src="src/scripts/angular-route.min.js"></script>
     <!--Custom Scripts-->
     <script src="src/app/scripts/Module/app.js"></script>
@@ -22,12 +22,6 @@
 <body>
     <nav class="navbar navbar-default">
         <div class="container-fluid navContainer">
-            <div class="navbar-header">
-
-                <a class="navbar-brand" id="navLogo" href="#/Home">
-                    <img src="http://placehold.it/150x100" class="navLogo" alt="Home" />
-                </a>
-            </div>
             <div id="navbar" class="navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="#/Home">Home<span class="sr-only">active</span></a></li>
@@ -40,13 +34,13 @@
 
     <div class="container-fluid">
         <div class="col-md-8">
-            <div class="panel">
+            <div class="panel panelDiv">
                 <div class="panel-heading"></div>
                 <div data-ng-view></div>
             </div>
         </div>
         <div ng-controller="mainPageController"class="col-md-4">
-            <div class="panel">
+            <div class="panel panelDiv">
                 <div class="panel-heading">
                 </div>
                 <div data-ng-include="'src/app/templates/EventLog.html'"></div>

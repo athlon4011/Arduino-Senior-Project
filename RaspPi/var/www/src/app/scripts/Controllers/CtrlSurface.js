@@ -1,12 +1,20 @@
 ﻿app.controller('ControlSurfaceController', ['$scope', 'Service','$interval', function ($scope, Service, $interval) {
 
     $scope.select = {};
+    $scope.CtrlState;
 
     //Add Hide Elements
     $scope.addElements = function () {
         for (var i = 0; i < $scope.items.length; i++) {
             $scope.items[i]['hide'] = true;
             $scope.items[i]['addHide'] = true;
+            for (var k = 0; k < $scope.items[i].ctrlSurface.length; k++) {
+                if ($scope.items[i].ctrlSurface[k].Status == 'on')
+                    $scope.items[i].ctrlSurface[k]['ctrlState'] = true;
+                else {
+                    $scope.items[i].ctrlSurface[k]['ctrlState'] = false;
+                }
+            }
         }
     }
 
@@ -61,10 +69,15 @@
             for (var i = 0; i < $scope.items.length; i++) {
                 for (var k = 0; k < $scope.items[i].ctrlSurface.length; k++) {
                     $scope.items[i].ctrlSurface[k] = object[i].ctrlSurface[k];
+                    if ($scope.items[i].ctrlSurface[k].Status == 'on')
+                        $scope.items[i].ctrlSurface[k]['ctrlState'] = true;
+                    else {
+                        $scope.items[i].ctrlSurface[k]['ctrlState'] = false;
+                    }
                 }
             }
         });
-    }, 3000)
+    }, 1000)
 
     //Add Ctrl Surface
     $scope.add = function (idx) {
@@ -95,6 +108,18 @@
         })
     }
 
+    $scope.UpdateState = function (pIdx, cIdx) {
+        pid = $scope.items[pIdx].ctrlSurface[cIdx].pid;
+
+        Service.UpdateCtrlState(pid).then(function () {
+            if ($scope.items[pid].ctrlSurface[cIdx].State == 'on')
+                $scope.items[pIdx].ctrlSurface[cIdx]['ctrlState'] = true;
+            else {
+                $scope.items[pIdx].ctrlSurface[cIdx]['ctrlState'] = false;
+            }
+        })
+    }
+
 
     $scope.ctrlSurfaces = [
         {
@@ -106,74 +131,5 @@
             label: "Fan",
         }
     ]
-
-    //if (confirm("Press a button!") == true) {
-    //    x = "You pressed OK!";
-    //} else {
-    //    x = "You pressed Cancel!";
-    //}
-
-
-    //$scope.items = [
-    //    {
-    //        nodeID: '1',
-    //        nodeLocation: 'Room1',
-    //        ctrlSurface: [
-    //            {
-    //                type: 'Light',
-    //                Status: 'On',
-    //            },
-    //            {
-    //                type: 'Fan',
-    //                Status: 'On',
-    //            },
-    //        ]
-    //    },
-    //     {
-    //         nodeID: '2',
-    //         nodeLocation: 'Room2',
-    //         ctrlSurface: [
-    //             {
-    //                 type: 'Light',
-    //                 Status: 'On',
-    //             },
-    //             {
-    //                 type: 'Fan',
-    //                 Status: 'On',
-    //             },
-    //         ]
-    //     },
-    //     {
-    //         nodeID: '3',
-    //         nodeLocation: 'Room3',
-    //         ctrlSurface: [
-    //             {
-    //                 type: 'Light',
-    //                 Status: 'On',
-    //             },
-    //             {
-    //                 type: 'Fan',
-    //                 Status: 'On',
-    //             },
-    //         ]
-    //     },
-    //     {
-    //         nodeID: '4',
-    //         nodeLocation: 'Room4',
-    //         ctrlSurface: [
-    //             {
-    //                 type: 'Light',
-    //                 Location: 'Room4',
-    //                 Status: 'On',
-    //             },
-    //             {
-    //                 type: 'Fan',
-    //                 Location: 'Room4',
-    //                 Status: 'On',
-    //             },
-    //         ]
-    //     }
-    //]
-
 
 }]);
