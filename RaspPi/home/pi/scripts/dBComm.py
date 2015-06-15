@@ -77,10 +77,10 @@ def check_duplicate_data(NodeID,json_file):
 		cursor = dataBase.cursor()
 		cursor.execute("Select count(*) from Sensor_Log")
 		dataBase.commit()
-        count =  cursor.fetchone()[0]
-        if count == 0:
-            return False
-        else:
+		count =  cursor.fetchone()[0]
+		if count == 0:
+			return False
+		else:
 			cursor.execute("Select Data from Sensor_Log where NodeID = %s ORDER BY Date DESC LIMIT 1",(NodeID))
 			dataBase.commit()
 			previous_data = ''.join(cursor.fetchone())
