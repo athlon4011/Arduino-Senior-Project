@@ -144,7 +144,7 @@ function removeSurface($link,$pid) {
 }
 
 function getSurface($link) {
-	$stmt="SELECT * FROM Nodes;";
+	$stmt="SELECT * FROM Nodes WHERE type='data';";
 	$result = "[";
 	foreach(mysql_to_mysqli($stmt, $link) as $row) {
 		if($row['enabled'] == 1) {
