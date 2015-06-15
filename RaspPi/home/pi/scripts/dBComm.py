@@ -210,5 +210,42 @@ def checkConsistency(nodeID,delay,leftvar,rightvar):
 	except Exception as err:
 		print("Error checking Consistency")
 		print(err)
+	
+	#Gets enabled Control Surfaces
+def get_Control_Surface_Nodes():
+	out = []
+	try:
+		cursor = dataBase.cursor()
+		cursor.execute("Select IP,Loc from Nodes where enabled = 1 and type = 'control' ")
+		rows = cursor.fetchall()	
+		for row in rows:    
+			data ={}
+			for i in range(len(row)):
+				if row[i] != None:
+				    tmp = cursor.description            
+				    data[tmp[i][0]] = row[i]
+			out.append(data)
+		print(out)
+	except Exception as err:
+		print (err)
+	finally:
+		return out
 		
-		
+def get_State_of_Control_Surface(Loc):
+	out= []
+	try:
+		cursor = dataBase.cursor()
+		cursor.execute("Select State,Type from ctrl_surf where Loc = %s  ",(Loc))
+		rows = cursor.fetchall()	
+		for row in rows:    
+			data ={}
+			for i in range(len(row)):
+				if row[i] != None:
+				    tmp = cursor.description            
+				    data[tmp[i][0]] = row[i]
+			out.append(data)
+		print(out)
+	except Exception as err:
+		print (err)	
+	finally:
+		return out
