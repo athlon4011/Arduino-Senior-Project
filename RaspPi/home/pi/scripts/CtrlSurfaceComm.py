@@ -1,5 +1,6 @@
 import dBComm
 import socket
+import time
 
 
 
@@ -16,6 +17,7 @@ def send_Command_to_CtrlSurface(NodeIP,data,Loc):
 while 1:
 	#get the Control Nodes Information
 	for ctrlNodeLoc in dBComm.get_Control_Surface_Nodes():
+		data= ""
 		LightState = ''
 		FanState = ''
 		for ctrlState in dBComm.get_State_of_Control_Surface(ctrlNodeLoc['Loc']):
@@ -29,7 +31,7 @@ while 1:
 					FanState = '1'
 				else:
 					FanState = '0'
-					#Send Command to Control Surface
+		#Send Command to Control Surface
 		data = LightState + ',' + FanState
 		send_Command_to_CtrlSurface(ctrlNodeLoc['IP'], data,ctrlNodeLoc['Loc'])
 		

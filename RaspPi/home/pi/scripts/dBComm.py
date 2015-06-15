@@ -235,8 +235,9 @@ def get_State_of_Control_Surface(Loc):
 	out= []
 	try:
 		cursor = dataBase.cursor()
-		cursor.execute("Select State,Type from ctrl_surf where Loc = %s  ",(Loc))
+		cursor.execute("Select State,Type from ctrl_surf where Loc = %s ",(Loc))
 		rows = cursor.fetchall()	
+		dataBase.commit()
 		for row in rows:    
 			data ={}
 			for i in range(len(row)):
@@ -244,7 +245,6 @@ def get_State_of_Control_Surface(Loc):
 				    tmp = cursor.description            
 				    data[tmp[i][0]] = row[i]
 			out.append(data)
-		print(out)
 	except Exception as err:
 		print (err)	
 	finally:
