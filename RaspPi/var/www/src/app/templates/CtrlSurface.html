@@ -28,8 +28,9 @@
             <tbody data-ng-repeat="ctrl in item.ctrlSurface" data-ng-init="cIdx = $index">
                 <tr>
                     <td>{{ctrl.type}}</td>
-                    <td data-ng-show="ctrl.ctrlState"><input data-ng-click="UpdateState(pIdx,cIdx)" style="height:20px; width:20px;" type="image" src="src/Images/PowerOn" /></td>
-                    <td data-ng-show="!ctrl.ctrlState"><input data-ng-click="UpdateState(pIdx,cIdx)" style="height:20px; width:20px;" type="image" src="src/Images/PowerOff" /></td>
+                    <td ng-show="$first">{{ctrl.Status}}</td>
+                    <td data-ng-show="ctrl.ctrlState"><input ng-show="!$first" data-ng-click="UpdateState(pIdx,cIdx)" style="height:20px; width:20px;" type="image" src="src/Images/PowerOn" /></td>
+                    <td data-ng-show="!ctrl.ctrlState"><input ng-show="!$first" data-ng-click="UpdateState(pIdx,cIdx)" style="height:20px; width:20px;" type="image" src="src/Images/PowerOff" /></td>
                     <td><button type="button" class="btn btn-default" ng-show="!$first" data-ng-click="remove(pIdx,cIdx)">Remove</button></td>
                 </tr>
             </tbody>
