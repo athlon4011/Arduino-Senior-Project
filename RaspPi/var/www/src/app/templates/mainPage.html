@@ -1,4 +1,51 @@
-﻿<div class="panel-body">
+﻿<accordion class="accordion col-md-12" close-others="false">
+    <accordion-group data-ng-repeat="node in Nodes" is-open="$first" data-ng-click="AccordionHeader($index)">
+        <accordion-heading>
+            Node: {{node.NodeID}}
+            <table class=" table table-hover" data-ng-show="node.hide">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Lux</th>
+                        <th>Motion</th>
+                        <th>Smoke</th>
+                        <th>Temperature</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="item in node.node" ng-show="$first">
+                        <td> {{item.Date}}</td>
+                        <td>{{item.lux}}</td>
+                        <td>{{item.motion}}</td>
+                        <td>{{item.smoke}}</td>
+                        <td>{{item.temp}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </accordion-heading>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Lux</th>
+                    <th>Motion</th>
+                    <th>Smoke</th>
+                    <th>Temperature</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="item in node.node">
+                    <td> {{item.Date}}</td>
+                    <td>{{item.lux}}</td>
+                    <td>{{item.motion}}</td>
+                    <td>{{item.smoke}}</td>
+                    <td>{{item.temp}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </accordion-group>
+</accordion>
+<!--<div class="panel-body">
     <div data-ng-repeat="node in Nodes">
         <label class="page-header">Node: {{node.NodeID}}</label>
         <div class="panel">
@@ -28,5 +75,5 @@
             </div>
         </div>      
     </div>   
-</div>
+</div>-->
 

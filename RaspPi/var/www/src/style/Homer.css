@@ -10,12 +10,17 @@
     width: 400px;
 }
 
-.panel{
-    border: 2px solid black;
-    height: 800px; 
+.panelDiv{
+    height: 800px;
     background:white;
     overflow-y:scroll;
+    border: 2px solid black; 
 }
+
+.panel-collapse .panel-body{
+    height:400px;
+    overflow-y:scroll;
+} 
 
 #CtrlForm label{
     text-align: left;
