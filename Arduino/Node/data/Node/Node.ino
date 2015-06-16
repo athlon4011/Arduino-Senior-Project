@@ -50,6 +50,7 @@ void setup() {
   Ethernet.begin(mac);            // Start Ethernet connection
   Udp.begin(localPort);              // Start UDP server
   Serial.begin(9600);                // Serial Output init
+  // Sends a broadcast message throughout the network for the server to find the node
   while(boot) {
     Udp.flush();
     sendPacket(macstr,8888);
