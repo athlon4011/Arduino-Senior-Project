@@ -159,13 +159,11 @@
 
     this.UpdateCtrlState = function (pid) {
         var request = $http({
-            url: 'src/backend/db.connect.php?type=removeSurface&pid=' + pid,
+            url: 'src/backend/db.connect.php?type=editSurface&pid=' + pid,
             method: 'GET',
         })
         request.success(function (data) {
-            deffered.resolve();
         });
-        return deffered.promise;
     }
 
 
