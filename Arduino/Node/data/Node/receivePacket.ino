@@ -1,43 +1,16 @@
 void receivePacket() {
+  // Checks the UDP packet for IP and message type, then pulls or displays the data that the server has posted
   int packetSize = Udp.parsePacket();
   if(packetSize)
   {
     IPAddress remote = Udp.remoteIP();
-    if(server == remote) {
-    /*if(debug) {
-      Serial.print("Received packet from ");
-      
-      for (int i =0; i < 4; i++)
-      {
-        Serial.print(remote[i], DEC);
-        if (i < 3)
-        {
-          Serial.print(".");
-        }
-      }
-      Serial.print(", port ");
-      Serial.print(Udp.remotePort());
-      Serial.print(", size ");
-      Serial.println(packetSize);
-    }*/
+    if(server == remote) { // Validate the source IP address against the store server IP
     // read the packet into packetBufffer
     char* msg = (char*)malloc(packetSize+1);
     int len = Udp.read(msg,packetSize+1);
-    msg[len]=0;/*
-    if(debug) {
-      Serial.print("Contents: ");
-      Serial.println(msg);
-      //Serial.print('|');
-    }*/
-    //String test = msg;
-    //test.trim();
-    //char compare[] = "hello";
-    //Serial.print("Compare: ");
-    //Serial.println(test.length());
-    //Serial.println(test);
+    msg[len]=0;
     Udp.flush();
-    if(String(msg).startsWith("pull")) {
-      //Serial.println("TRUE"); 
+    if(String(msg).startsWith("pull")) { // Validate the mesage type
       // Gather data to send to server
       String dataString;
       dataString += extTemp(); // Load external temperature into data string
@@ -47,29 +20,22 @@ void receivePacket() {
       dataString += getSmoke();
       char message[dataString.length()]; 
       dataString.toCharArray(message,dataString.length()); // convert string to char array
-      sendPacket(message,Udp.remotePort());
+      sendPacket(message,Udp.remotePort()); // Send the CSV of data back to the server
     } else if(String(msg).startsWith("send")) {
       String test = String(msg);
       test.remove(0,5);
       separateData(test);
       Udp.stop();
-       // Serial.print("restart connection: ");
-          Udp.begin(localPort);
-//    Serial.println (Udp.begin(localPort) ? "success" : "failed");
+      Udp.begin(localPort); // Restart UDP Server
     } else {
       Udp.stop();
-      //  Serial.print("restart connection: ");
-          Udp.begin(localPort);
-//    Serial.println (Udp.begin(localPort) ? "success" : "failed");
+      Udp.begin(localPort); // Restart UDP Server
     }
-    //testString(msg, (packetSize-2));
-    free(msg);
+    free(msg); // Clear the string's buffer
     } else {
-     // Serial.println("Invalid Server!");
-      Udp.stop();
-      //  Serial.print("restart connection: ");
-         Udp.begin(localPort);
-//    Serial.println (Udp.begin(localPort) ? "success" : "failed");
+		// Invalid server trying to communicate with the node
+		Udp.stop();
+		Udp.begin(localPort); // Restart UDP Server
     }
   }
 }

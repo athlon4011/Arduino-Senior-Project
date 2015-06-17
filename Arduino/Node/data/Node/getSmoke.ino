@@ -1,17 +1,11 @@
 String getSmoke() {
-String temp;
-  /*if(debug) {
-    Serial.print("Smoke Alarm state: ");
-    //Serial.println(digitalRead(motion_pin));
-  }*/
+  // Obtains the voltage level of the smoke detector's red LED to determine if the alarm is going off
+  String temp;
   int state = 0;
- /* Serial.println();  Serial.println();  Serial.println();
-  Serial.print("ALARM VALUE: ");
-    Serial.println(analogRead(alarm_pin));*/
+  // Alarm fluctuates between 0 and 850 when not engaged
   if(analogRead(alarm_pin) > 900) {
     state = 1;
   }
-  //temp += "motion"; temp += ','; temp += digitalRead(motion_pin); temp += ',';
   temp += "smoke"; temp += ','; temp += state; temp += ',';
   return temp;
 }

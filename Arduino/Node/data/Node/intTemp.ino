@@ -1,4 +1,6 @@
-/*String intTemp() {
+/*
+// No longer in use
+String intTemp() {
   String temp;
   //temp += chipTemp.celsius(); temp += ',';
     temp += 'temp'; temp += chipTemp.fahrenheit(); temp += ',';

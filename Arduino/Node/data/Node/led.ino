@@ -1,48 +1,24 @@
-/*void setLED(int pin1,int pin2,int pin3,int loops, int interval) {
-  int i;
-  for(i=0;i<loops;i++) {
-    if(pin1 != 0) {analogWrite(red, 255);  } // turn the LED on (HIGH is the voltage level)
-    if(pin2 != 0) {analogWrite(green, 255); }  // turn the LED on (HIGH is the voltage level)
-    if(pin3 != 0) {analogWrite(blue, 255); }  // turn the LED on (HIGH is the voltage level)
-    delay(interval);
-    if(pin1 != 0) {analogWrite(red, 0);  }  // turn the LED off by making the voltage LOW
-    if(pin2 != 0) {analogWrite(green, 0);  }  // turn the LED off by making the voltage LOW
-    if(pin3 != 0) {analogWrite(blue, 0);  } // turn the LED on (HIGH is the voltage level)
-    delay(interval);
-  }
-}*/
-
 void setLED(int red, int green, int blue, int loops, int interval) {
-  /*Serial.print("red: ");
-  Serial.println(red);
-  Serial.print("green: ");
-  Serial.println(green);
-  Serial.print("blue: ");
-  Serial.println(blue);
-  Serial.print("loops: ");
-  Serial.println(loops);
-  Serial.print("interval: ");
-  Serial.println(interval);*/
-    byte on[] = {red,green,blue}; //the RGB (red, gren blue) value for a color to display  
-    byte off[] = {0,0,0}; //the RGB (red, gren blue) value for a color to display  
-    //setColor(leds, on);  
-    int i;
+  // Intial function to setup the fading between the target color and black
+  byte on[] = {red,green,blue}; // Loads the arguments in for the targeted color
+  byte off[] = {0,0,0}; // Passes a color of black for the off state
+  
+  int i; 
   for(i=0;i<loops;i++) {
-    //setColor(leds, on);
     fadeToColor(leds, off, on, interval);  
-    //delay(interval);
     fadeToColor(leds, on, off, interval);  
-    //delay(interval);
   }
 }
 
 void setColor(int* led, byte* color){ 
+  // Sets the color for each pin on the LED's
   for(int i = 0; i < 3; i++){
     analogWrite(led[i], color[i]);  
   }
 }
 
 void fadeToColor(int* led, byte* startColor, byte* endColor, int fadeSpeed){  
+  // Calculates the amount of steps between the start color and the end color, then sets the LED each step
   int changeRed = endColor[0] - startColor[0];                            //the difference in the two colors for the red channel  
   int changeGreen = endColor[1] - startColor[1];                          //the difference in the two colors for the green channel   
   int changeBlue = endColor[2] - startColor[2];                           //the difference in the two colors for the blue channel  
