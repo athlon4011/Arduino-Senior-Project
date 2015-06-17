@@ -4,6 +4,7 @@ import time
 import Functions
 from nodeComm import Node_Send_Command
 
+
 #Checking Node data against Rules
 def check_vs_Rules(nodedict):
 	data,title = dBComm.get_Rules()

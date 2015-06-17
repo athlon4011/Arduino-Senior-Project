@@ -18,6 +18,7 @@
         }
     }
 
+    //Calls Service Function to retrieve Ctrl Surface Data
     Service.surfaceCall().then(function () {
         $scope.items = Service.getSurface();
         $scope.addElements();
@@ -57,8 +58,6 @@
                 $scope.addElements();
             });
         })
-        //$scope.items[idx].hide = true;
-
     }
 
     //Continously Get Surface information every 3 seconds if edit or add control surface is not true;
@@ -108,6 +107,7 @@
         })
     }
 
+    //Updates the state of the Control Surface, Power ON/Power OFF
     $scope.UpdateState = function (pIdx, cIdx) {
         pid = $scope.items[pIdx].ctrlSurface[cIdx].pid;
 
@@ -120,7 +120,7 @@
         })
     }
 
-
+    //Used to populate add control surface dropdown
     $scope.ctrlSurfaces = [
         {
             value: "Light",

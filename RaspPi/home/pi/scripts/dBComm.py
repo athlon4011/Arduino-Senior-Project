@@ -6,23 +6,22 @@ dataBase = MySQLdb.connect(host = 'localhost',
                            user = 'root',
                            passwd = 'H0m3r',
                            db = 'homer'		)		
+dataBase.autocommit(True)
 						   
 						   
 #Store JSON into Database
 def dBJSON_Store(json_file,NodeID):
     cursor = dataBase.cursor()
     cursor.execute("Insert into Sensor_Log(Date,NodeID,Data) values(NOW(),%s,%s)",(NodeID,json_file))
-    dataBase.commit()
     message = "Node "+str(NodeID)+" sensor data was stored."
     log_Event("System",message)
 
 #Fetch an Associative Array from MySQL database
-def mysql_fetch_assoc():
+def getEnabledNodes():
 	out = []  
 	try:
 		cursor = dataBase.cursor()
 		cursor.execute("Select NodeID,IP from Nodes where enabled = 1 and type = 'data'")
-		dataBase.commit()
 		rows = cursor.fetchall()	
 		for row in rows:    
 			data ={}
@@ -43,7 +42,6 @@ def nodeCount():
 	try:
 		cursor = dataBase.cursor()
 		cursor.execute("Select count(*) from Nodes where Nodes.enabled = 1;")
-		dataBase.commit()
 		count = cursor.fetchone()[0]
 		cursor.close()
 		return count
@@ -57,14 +55,12 @@ def nodeCount():
 def log_Event(type,message):
     cursor = dataBase.cursor()
     cursor.execute("Insert into Event_Log(Date,Type,Message) values(NOW(),%s,%s)",(type,message))
-    dataBase.commit()
 
 #gets Last Log Event Message
 def get_Last_Log_Event():
 	try:
 		cursor = dataBase.cursor()
 		cursor.execute("Select Message from Event_Log ORDER BY Date DESC LIMIT 1")
-		dataBase.commit()
 		previous_data = ''.join(cursor.fetchone())
 		return previous_data
 	except Exception as err:
@@ -75,14 +71,11 @@ def check_duplicate_data(NodeID,json_file):
 
     try:
 		cursor = dataBase.cursor()
-		cursor.execute("Select count(*) from Sensor_Log")
-		dataBase.commit()
 		count =  cursor.fetchone()[0]
 		if count == 0:
 			return False
 		else:
 			cursor.execute("Select Data from Sensor_Log where NodeID = %s ORDER BY Date DESC LIMIT 1",(NodeID))
-			dataBase.commit()
 			previous_data = ''.join(cursor.fetchone())
 			if previous_data == json_file:
 				return True
@@ -98,15 +91,12 @@ def store_node_information(NodeIP,MAC):
     try:
 		cursor = dataBase.cursor()
 		cursor.execute("Select count(*) from Nodes where MAC= %s;",(MAC))
-		dataBase.commit()
 		count = cursor.fetchone()[0]
 		if count == 0:
 			cursor.execute("Insert into Nodes(IP,MAC,enabled,type,loc) values (%s, %s, 0, 'data','*New*')",(NodeIP,MAC))
-			dataBase.commit()
 			log_Event('System','New node added to the system.')
 		else:
 			cursor.execute("Update Nodes set  IP= %s where MAC= %s;",(NodeIP,MAC))
-			dataBase.commit()
 			print("Already Have that Node, Updated IP")        
 
     except Exception as err:
@@ -117,10 +107,8 @@ def get_Rules():
     try:
 		cursor = dataBase.cursor()
 		cursor.execute("Select Data from Rules where enabled = 1")
-		dataBase.commit()
 		data = cursor.fetchall()
 		cursor.execute("Select Title from Rules where enabled = 1")
-		dataBase.commit()
 		title = cursor.fetchall()
 		return data,title
     except Exception as err:
@@ -131,7 +119,6 @@ def update_Control_Surface(nodeid,ctrtype,ctrstate):
 	try:
 		cursor = dataBase.cursor()
 		cursor.execute("Update ctrl_surf inner join Nodes Set State = %s where (Select Nodes.Loc from Nodes where NodeID = %s) = ctrl_surf.Loc and ctrl_surf.Type = %s",(ctrstate,nodeid,ctrtype))
-		dataBase.commit()
 	except Exception as err:
 		print("Error updating control surfaces")
 		print(err)
@@ -140,11 +127,9 @@ def check_Control_Surface_State(nodeid,ctrtype,ctrstate):
 	try:
 		cursor = dataBase.cursor()
 		cursor.execute("Select count(*) from ctrl_surf inner join Nodes where (Select Nodes.Loc from Nodes where NodeID = %s) = ctrl_surf.Loc and ctrl_surf.Type = %s",(nodeid,ctrtype))
-		dataBase.commit()
 		count = cursor.fetchone()[0]
 		if count > 0:
 			cursor.execute("Select State from ctrl_surf inner join Nodes where (Select Nodes.Loc from Nodes where NodeID = %s) = ctrl_surf.Loc and ctrl_surf.Type = %s",(nodeid,ctrtype))
-			dataBase.commit()
 			dbState = ''.join(cursor.fetchone())
 			if dbState == ctrstate:
 				return True
@@ -160,11 +145,9 @@ def check_Control_Surface_State_NA(ctrtype,ctrstate):
 	try:
 		cursor = dataBase.cursor()
 		cursor.execute("Select count(*) from ctrl_surf where ctrl_surf.Type = %s",(ctrtype))
-		dataBase.commit()
 		count = cursor.fetchone()[0]
 		if count > 0:
 			cursor.execute("Select State from ctrl_surf where ctrl_surf.Type = %s",(ctrtype))
-			dataBase.commit()
 			dbState = ''.join(cursor.fetchone())
 			if dbState == ctrstate:
 				return True
@@ -180,7 +163,6 @@ def update_Control_Surface_HVAC(ctrtype,ctrstate):
 	try:
 		cursor = dataBase.cursor()
 		cursor.execute("Update ctrl_surf Set State = %s where Type = %s",(ctrstate,ctrtype))
-		dataBase.commit()
 	except Exception as err:
 		print("Error updating control surfaces")
 		print(err)
@@ -189,7 +171,6 @@ def get_Color_Codes(ledcolor):
 	try:
 		cursor = dataBase.cursor()
 		cursor.execute('Select red,green,blue from Colors where name = %s',(ledcolor))
-		dataBase.commit()
 		colors = cursor.fetchone()
 		if(colors != None):
 			colorsArray = []
@@ -209,7 +190,6 @@ def getSettings():
 	try:
 		cursor = dataBase.cursor()
 		cursor.execute('Select Settings from Settings')
-		dataBase.commit()
 		data = cursor.fetchone()
 		return data[0]
 	except Exception as err:
@@ -220,7 +200,6 @@ def checkConsistency(nodeID,delay,leftvar,rightvar):
 	try:
 		cursor = dataBase.cursor()
 		cursor.execute("SELECT count(*) FROM homer.Sensor_Log where NodeID=\'" + str(nodeID) + "\' and Date BETWEEN \'" + delay + "\' AND NOW() and Data NOT LIKE \'%\"" + leftvar + "\": \"" + rightvar + "\"%\';")
-		dataBase.commit()
 		data = cursor.fetchone()[0]
 		return data
 	except Exception as err:
@@ -233,7 +212,6 @@ def get_Control_Surface_Nodes():
 	try:
 		cursor = dataBase.cursor()
 		cursor.execute("Select IP,Loc from Nodes where enabled = 1 and type = 'control' ")
-		dataBase.commit()
 		rows = cursor.fetchall()	
 		for row in rows:    
 			data ={}
@@ -254,7 +232,6 @@ def get_State_of_Control_Surface(Loc):
 		cursor = dataBase.cursor()
 		cursor.execute("Select State,Type from ctrl_surf where Loc = %s ",(Loc))
 		rows = cursor.fetchall()	
-		dataBase.commit()
 		for row in rows:    
 			data ={}
 			for i in range(len(row)):

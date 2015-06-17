@@ -95,6 +95,7 @@
         return settings;
     }
 
+    //Get Control Surface from DB and sets to local variable
     this.surfaceCall = function () {
         var deffered = $q.defer();
         var request = $http({
@@ -108,10 +109,12 @@
         return deffered.promise;
     }
 
+    //returns control surfaces
     this.getSurface = function () {
         return surface;
     }
 
+    //Removes Control Surface
     this.removeSurface = function (pid) {
         var deffered = $q.defer();
         var request = $http({
@@ -124,6 +127,7 @@
         return deffered.promise;
     }
 
+    //Adds a Control Surface
     this.addSurface = function (loc, type) {
         var deffered = $q.defer();
         var request = $http({
@@ -136,6 +140,7 @@
         return deffered.promise;
     }
 
+    //Edits Node information
     this.editNode = function (nid, enabled, loc) {
         var deffered = $q.defer();
         var request = $http({
@@ -148,6 +153,7 @@
         return deffered.promise;
     }
 
+    //Removes a Node(Not Used)
     this.removeNode = function (nid) {
         var request = $http({
             url: 'src/backend/db.connect.php?type=removeNode' + '&nid=' + nid,
@@ -157,6 +163,7 @@
         });
     }
 
+    //Updates Control Surface data
     this.UpdateCtrlState = function (pid) {
         var request = $http({
             url: 'src/backend/db.connect.php?type=editSurface&pid=' + pid,

@@ -47,7 +47,7 @@
             <tr data-ng-repeat="item in items">
                 <td>{{item.Title}}</td>
                 <td> {{item.Description}}</td>
-                <td> <input type="checkbox" data-ng-model="item.Enabled" data-ng-change="Test(item.ID)" /></td>
+                <td> <input type="checkbox" data-ng-model="item.Enabled" data-ng-change="enableRule(item.ID)" /></td>
             </tr>
         </tbody>
     </table>

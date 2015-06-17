@@ -5,6 +5,7 @@
     $scope.start = new Date();
     $scope.end = new Date();
 
+    //Gets all rules
     Service.getRulesLog().then(function () {
         $scope.items = Service.getRules();
     });
@@ -18,7 +19,7 @@
         timeout: '',
     }
 
-
+    //Gets settings and sets populates form
     Service.settingsCall().then(function(){
         $scope.Settings = Service.getSettings();
 
@@ -41,7 +42,7 @@
         $scope.formEnable = true;
     }
 
-    //Formats the Time's to hh:mm a
+    //Formats the Time's to hh:mm a and  watches for change
     $scope.$watch('start', function (value) {
         time = dateFilter(value, 'HH:mm:a');
         test = time.split(":");
@@ -101,26 +102,8 @@
             $scope.formEnable = true;
         }
     }
-
-    //Example JSON Objects
-    //$scope.items = [
-    //    {
-    //        ID: 0,
-    //        Enabled: true,
-    //        Title: 'AC',
-    //        Description: "Turn on AC"
-    //    },
-    //    {
-    //        ID: 1,
-    //        Enabled: false,
-    //        Title: 'Heater',
-    //        Description: "Turn on Heater"
-    //    },
-
-    //];
-
     //Testing of enable// Soon will send status back to SQL server
-    $scope.Test = function (ID) {
+    $scope.enableRule = function (ID) {
         Service.setRulesEnabled(ID);
     }
 

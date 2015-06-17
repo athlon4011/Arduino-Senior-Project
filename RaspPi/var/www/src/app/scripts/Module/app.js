@@ -1,5 +1,6 @@
 ﻿var app = angular.module('app', ["ui.bootstrap","ui.bootstrap.tpls", 'ngRoute', 'ng',]);
 
+//Routing
 app.config(function ($routeProvider) {
     $routeProvider
         .when('/Home',
