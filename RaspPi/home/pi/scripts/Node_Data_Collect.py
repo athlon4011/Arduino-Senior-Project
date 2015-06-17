@@ -27,4 +27,5 @@ while 1:
 				#if not store the JSON
 				if dBComm.check_duplicate_data(node['NodeID'],json_file) == False:
 					dBComm.dBJSON_Store(json_file,node['NodeID']);
-		RulesEngine.check_vs_Rules(nodedict)
+		if len(nodedict) > 0:
+			RulesEngine.check_vs_Rules(nodedict)	
