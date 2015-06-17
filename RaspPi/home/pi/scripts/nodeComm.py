@@ -37,7 +37,8 @@ def Node_Data_Request(NodeIP,NodeID):
 			if message != dBComm.get_Last_Log_Event():
 				#Create Error Event      
 				dBComm.log_Event("Error",message)
-    return received;
+			break
+    return received
 
 #Waits for Data to be available on the socket
 def recv_timeout(sock,timeout=1):
@@ -45,7 +46,7 @@ def recv_timeout(sock,timeout=1):
     sock.setblocking(0)
     #total data in an array
     total_data=[];
-    data='';
+    data=''
      
     #beginning time
     begin=time.time()
