@@ -112,7 +112,7 @@
         pid = $scope.items[pIdx].ctrlSurface[cIdx].pid;
 
         Service.UpdateCtrlState(pid).then(function () {
-            if ($scope.items[pid].ctrlSurface[cIdx].State == 'on')
+            if ($scope.items[pIdx].ctrlSurface[cIdx].State == 'on')
                 $scope.items[pIdx].ctrlSurface[cIdx]['ctrlState'] = true;
             else {
                 $scope.items[pIdx].ctrlSurface[cIdx]['ctrlState'] = false;

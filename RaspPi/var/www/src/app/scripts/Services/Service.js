@@ -165,12 +165,15 @@
 
     //Updates Control Surface data
     this.UpdateCtrlState = function (pid) {
+        var deffered = $q.defer();
         var request = $http({
             url: 'src/backend/db.connect.php?type=editSurface&pid=' + pid,
             method: 'GET',
         })
         request.success(function (data) {
+            deffered.resolve();
         });
+        return deffered.promise;
     }
 
 

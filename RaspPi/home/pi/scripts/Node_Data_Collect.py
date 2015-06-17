@@ -13,9 +13,7 @@ while 1:
 	nodedict = []
 	if(dBComm.nodeCount() > 0):
 		#Checks all known Nodes, retrieves NodeID and NodeIP and polls through
-		for node in dBComm.mysql_fetch_assoc():
-			#Testing Send command to node
-			#nodeComm.Node_Send_Command(node['IP'],data,node['NodeID'])
+		for node in dBComm.getEnabledNodes():
 			#Collects Nodes Sensor data (String Form)
 			nodeData = nodeComm.Node_Data_Request(node['IP'],node['NodeID'])
 			

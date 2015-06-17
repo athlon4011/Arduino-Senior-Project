@@ -36,8 +36,6 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 	#Convert type instance to dictionary
 	if node != None:
 		node = Functions.convert_inst_to_dict(node)
-		# node = json.loads(node)
-		# print(node['id'])
 	#check to see if the Rule needs to run once or more than once2
 	for idx, each in enumerate(conditions):				
 			modifier = conditions[idx]['modifier']
@@ -68,22 +66,12 @@ def ifcondition_Creation(ifcondition,conditions, nodedict, node):
 						anode = Functions.convert_inst_to_dict(anode)
 						sum += float(anode[leftvar])
 					ifcondition = ifcondition + " " + str(sum) + " " + operand
-				# elif modifier == 'max':
-					# #Get MAX
-					# continue
-				# elif modifier == 'min':
-					# #Get MIN
-					# continue
-				# else modifier == 'na':
-					# #Not sure if this will ever happen with a nodeall
-					# continue
 			#NODE ANY TYPE
 			elif leftype == 'nodeany':
 				if('overtime' in conditions[idx]):
 					ifcondition = ifcondition + " 0 " + operand
 				else:
-					ifcondition = ifcondition + " " + node[leftvar] + " " + operand
-					
+					ifcondition = ifcondition + " " + node[leftvar] + " " + operand				
 			#SERVER TYPE
 			elif leftype == 'server':
 				if leftvar == 'current_time':
@@ -169,11 +157,6 @@ def resultcondition_Creation(results,nodedict,node):
 						for Anode in nodedict: 
 							Node_Send_Command(Anode.ip,dataString,Anode.id)
 			else:
-				# print('HERE Else')
-				# print(dBComm.check_Control_Surface_State_NA(ctrtype,ctrstate))
-				# print(ctrstate)
-				# print(ctrtype)
-				# print(lednodetype)
 				if ctrtype != 'na':
 					if dBComm.check_Control_Surface_State_NA(ctrtype,ctrstate) != True:
 						dBComm.update_Control_Surface_HVAC(ctrtype,ctrstate)
